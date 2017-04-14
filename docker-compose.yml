@@ -399,6 +399,9 @@ services:
 
     adminer:
       build: ./adminer
+      environment:
+        - ADMINER_VERSION=${ADM_VERSION}
+        - ADMINER_DOWNLOAD_SHA256=${ADM_SHA256}  
       ports:
         - "${ADM_PORT}:8080"
       depends_on:
