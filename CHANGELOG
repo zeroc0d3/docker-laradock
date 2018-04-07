@@ -1,0 +1,5 @@
+## version 6.1
+======================
+* Rewrite all laradock
+* Use docker-framework (zeroc0d3/docker-framework) structure
+* Add Ruby test unit (rspec) & Ruby docker-api

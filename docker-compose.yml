@@ -1,0 +1,198 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# CORE-BASE
+#================================================================================================
+  base:
+    restart: always
+    build:
+      context: ./docker/core-base
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
+      - S6OVERLAY_VERSION=${S6OVERLAY_VERSION}
+      - S6_BEHAVIOUR_IF_STAGE2_FAILS=${S6_BEHAVIOUR_IF_STAGE2_FAILS}
+      - LANG=${LANG}
+      - LC_ALL=${LC_ALL}
+      - LANGUAGE=${LANGUAGE}
+      - TERM=${TERM}
+
+#================================================================================================
+# CORE-BASE-CONSUL
+#================================================================================================
+  base-consul:
+    restart: always
+    build:
+      context: ./docker/core-base-consul
+    ports:
+      - "9999:9999"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONSULTEMPLATE_VERSION=${CONSULTEMPLATE_VERSION}
+      - CONSUL_AGENT=172.16.0.1                                 # agent hostname
+      - CONSUL_PORT=8500                                        # agent port
+      - CONSUL_TLS=0                                            # enable TLS
+      - CONSUL_SERVICENAME=base-consul                          # service name to register
+      - CONSUL_SERVICEPORT=9999                                 # service port
+
+#================================================================================================
+# CORE-CONSUL
+#================================================================================================
+  consul:
+    restart: always
+    build:
+      context: ./docker/core-consul
+    ports:
+      - "8500:8500"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONSUL_VERSION=${CONSUL_VERSION}
+      - CONSULTEMPLATE_VERSION=${CONSULTEMPLATE_VERSION}
+      - CONSUL_OPTIONS=-server -bootstrap-expect 1 -client 0.0.0.0 -ui    # minimal server options
+
+#================================================================================================
+# ADMINER
+#================================================================================================
+  adminer:
+    restart: always
+    build:
+      context: ./docker/adminer/${ADMINER_VERSION}
+    ports:
+      - "${ADMINER_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${SESSION_ADMINER}:/sessions                       # volume for data
+    networks:
+      - backend
+
+#================================================================================================
+# MARIADB
+#================================================================================================
+  mariadb:
+    restart: always
+    build:
+      context: ./docker/mariadb/${MARIADB_VERSION}
+    ports:
+      - "${MARIADB_PORT}:3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATABASE_MARIADB}:/var/lib/mysql                 # volume for data
+      - ${LOG_MARIADB}:/var/log/mysql                      # log mariadb
+    environment:
+      - MARIADB_VERSION=${MARIADB_VERSION}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}     # root password
+      - MARIADB_ROOT_HOST=${MARIADB_ROOT_HOST}             # grant user hostmask (optional)
+      - MARIADB_DATABASE=${MARIADB_DATABASE}               # create database (optional)
+      - MARIADB_USER=${MARIADB_USER}                       # grant user name (optional)
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}               # grant user password (optional)
+    networks:
+      - backend
+
+#================================================================================================
+# MYSQL
+#================================================================================================
+  mysql:
+    restart: always
+    build:
+      context: ./docker/mysql/${MYSQL5_VERSION}
+      # context: ./docker/mysql/${MYSQL8_VERSION}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATABASE_MYSQL}:/var/lib/mysql                      # volume for data
+      - ${LOG_MYSQL}:/var/log/mysql                           # log mysql
+      - ${CONFIG_MYSQL}:/etc/my.cnf                           # my.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/docker.cnf   # docker.cnf mysql
+    environment:
+      - MYSQL_VERSION=${MYSQL5_VERSION}
+      #- MYSQL_VERSION=${MYSQL8_VERSION}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}            # root password
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                    # grant user hostmask (optional)
+      - MYSQL_DATABASE=${MYSQL_DATABASE}                      # create database (optional)
+      - MYSQL_USER=${MYSQL_USER}                              # grant user name (optional)
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}                      # grant user password (optional)
+    networks:
+      - backend
+
+#================================================================================================
+# NGINX
+#================================================================================================
+  nginx:
+    restart: always
+    build:
+      context: ./docker/nginx
+    links:
+      - workspace
+    ports:
+      - "${NGINX_HTTP_PORT}:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_NGINX}:/etc/nginx/nginx.conf                   # nginx config path
+      - ${CONFIG_NGINX_PHPFPM}:/etc/nginx/conf.d/default.conf   # phpfpm config path
+      - ${LOG_NGINX}:/var/log/nginx                             # log nginx
+      - ${WORKSPACE}:/var/www                                   # volume for data
+    environment:
+      - NGINX_VERSION=${NGINX_VERSION}
+    networks:
+      - backend
+
+#================================================================================================
+# WORKSPACE
+#================================================================================================
+  workspace:
+    restart: always
+    build:
+      #context: ./docker/phpfpm/${PHP5_VERSION}
+      context: ./docker/phpfpm/${PHP7_VERSION}
+    links:
+      #- mysql           # uncomment, if you're using mysql
+      - mariadb          # uncomment, if you're using mariadb
+      #- postgresql      # uncomment, if you're using postgresql
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
+      - ${CONFIG_PHPFPM_INI}:/usr/local/etc/php/php.ini                             # ini path
+      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini    # xdebug config
+      - ${LOG_PHPFPM}:/var/log/phpfpm                                               # log phpfpm
+      - ${VENDOR_COMPOSER}:/usr/local/bin/composer                                  # vendor composer
+      - ${VENDOR_DEPLOYER}:/usr/local/bin/dep                                       # vendor deployer
+      - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
+      - ${WORKSPACE}:/var/www                                                       # volume for data
+    environment:
+      - PHP_VERSION=${PHP7_VERSION}
+      - XDEBUG_VERSION=${XDEBUG_VERSION}
+      - DEBUG=1
+    networks:
+      - backend
+
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  backend:
+    driver: "bridge"
+
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  consul:
+    driver: "local"
+  adminer:
+    driver: "local"
+  mariadb:
+    driver: "local"
+  mysql:
+    driver: "local"
+  nginx:
+    driver: "local"
+  workspace:
+    driver: "local"

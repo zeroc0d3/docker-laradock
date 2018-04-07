@@ -1,0 +1,9 @@
+.idea
+.env
+
+db
+log
+session
+workspace
+
+Gemfile.lock
