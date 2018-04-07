@@ -124,7 +124,7 @@ services:
       - "${ADMINER_PORT}:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${SESSION_ADMINER}:/sessions                       # volume for data
+      - ${SESSION_ADMINER}:/sessions                       # volume for sessions
     networks:
       - backend
 
@@ -191,7 +191,7 @@ services:
       - "${NGINX_HTTP_PORT}:80"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_NGINX}:/etc/nginx/nginx.conf                   # nginx config path
+      #- ${CONFIG_NGINX}:/etc/nginx/nginx.conf                  # nginx config path
       - ${CONFIG_NGINX_PHPFPM}:/etc/nginx/conf.d/default.conf   # phpfpm config path
       - ${LOG_NGINX}:/var/log/nginx                             # log nginx
       - ${WORKSPACE}:/var/www                                   # volume for data
@@ -212,6 +212,7 @@ services:
       #- mysql           # uncomment, if you're using mysql
       - mariadb          # uncomment, if you're using mariadb
       #- postgresql      # uncomment, if you're using postgresql
+      #- mongodb         # uncomment, if you're using mongodb
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
@@ -229,14 +230,12 @@ services:
     networks:
       - backend
 
-
 #================================================================================================
 # NETWORK SETUP
 #================================================================================================
 networks:
   backend:
     driver: "bridge"
-
 
 #================================================================================================
 # VOLUME SETUP

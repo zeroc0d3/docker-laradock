@@ -1,7 +1,14 @@
 #!/usr/bin/env sh
+# -----------------------------------------------------------------------------
+#  DOCKER BUILDER SCRIPT
+# -----------------------------------------------------------------------------
+#  Author     : Dwi Fahni Denni (@zeroc0d3)
+#  Repository : https://github.com/zeroc0d3/docker-framework
+#  License    : MIT
+# -----------------------------------------------------------------------------
 
 TITLE="LARADOCK BUILDER SCRIPT"      # script name
-VER="1.4"                            # script version
+VER="1.4.1"                          # script version
 ENV="0"                              # container environment (0 = development, 1 = production)
 SKIP_BUILD="0"                       # (0 = with build process, 1 = bypass build process)
 REMOVE_CACHE="0"                     # (0 = using cache, 1 = no-cache)
@@ -11,8 +18,8 @@ DAEMON_MODE="0"                      # (0 = disable daemon mode, 1 = running dae
 USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
-CONTAINER_PRODUCTION="consul adminer mariadb nginx workspace"
-CONTAINER_DEVELOPMENT="consul adminer mariadb nginx workspace"
+CONTAINER_PRODUCTION="consul workspace nginx adminer mariadb"
+CONTAINER_DEVELOPMENT="consul workspace nginx adminer mariadb"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
