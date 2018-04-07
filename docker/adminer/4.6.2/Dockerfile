@@ -18,6 +18,9 @@ RUN if [ ${INSTALL_MSSQL} = true ]; then \
   && echo "extension=pdo_sqlsrv.so" > /usr/local/etc/php/conf.d/20-pdo_sqlsrv.ini \
 ;fi
 
+COPY rootfs/ /
+RUN chown -R adminer:adminer /var/www/html
+
 USER adminer
 
 # Add volume for sessions to allow session persistence
