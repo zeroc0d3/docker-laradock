@@ -5,7 +5,7 @@ MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
 
 ENV MARIADB_ROOT_PASSWORD="password" \
     MARIADB_ROOT_HOST="localhost" \
-    MARIADB_DATABASE="laradock_mysql" \
+    MARIADB_DATABASE="laradock_mariadb" \
     MARIADB_USER="laradock" \
     MARIADB_PASSWORD="password"
 
