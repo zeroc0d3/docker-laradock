@@ -16,7 +16,7 @@ Laradock docker container list
 * - [X] debian percona 5.7 (percona5).
 * - [X] debian postgresql 9.6 (postgres9).
 * - [X] debian postgresql 10 (postgres10).
-* - [ ] debian mongodb 3.6 (mongodb3).
+* - [X] debian mongodb 3.6 (mongodb3).
 
 ### Database Tools
 * - [X] alpine adminer (adminer).
