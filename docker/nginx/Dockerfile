@@ -1,9 +1,11 @@
+ARG NGINX_VERSION=1.13.8-1~stretch
+ARG NJS_VERSION=1.13.8.0.1.15-1~stretch
 FROM debian:stretch-slim
 
 MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
 
-ENV NGINX_VERSION 1.13.8-1~stretch
-ENV NJS_VERSION   1.13.8.0.1.15-1~stretch
+ENV NGINX_VERSION=${NGINX_VERSION}
+ENV NJS_VERSION=${NJS_VERSION}
 
 RUN set -x \
 	&& apt-get update \
