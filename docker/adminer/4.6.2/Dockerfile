@@ -8,7 +8,7 @@ MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
 #####################################
 USER root
 ARG INSTALL_MSSQL=false
-ENV INSTALL_MSSQL ${INSTALL_MSSQL}
+ENV INSTALL_MSSQL=${INSTALL_MSSQL}
 RUN if [ ${INSTALL_MSSQL} = true ]; then \
   set -xe \
   && apk --update add --no-cache --virtual .phpize-deps $PHPIZE_DEPS unixodbc unixodbc-dev \
