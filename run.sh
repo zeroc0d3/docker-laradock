@@ -18,8 +18,8 @@ DAEMON_MODE="0"                      # (0 = disable daemon mode, 1 = running dae
 USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
-CONTAINER_PRODUCTION="consul workspace nginx adminer phpmyadmin mariadb"
-CONTAINER_DEVELOPMENT="consul adminer phpmyadmin mariadb percona"
+CONTAINER_PRODUCTION="consul workspace nginx adminer phpmyadmin mariadb mysql percona postgresql"
+CONTAINER_DEVELOPMENT="consul workspace nginx adminer mariadb percona postgresql"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
