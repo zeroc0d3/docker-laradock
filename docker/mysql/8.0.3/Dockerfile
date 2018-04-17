@@ -1,5 +1,5 @@
-ARG MYSQL8_VERSION=8.0.3
-FROM mysql/mysql-server:${MYSQL8_VERSION}
+ARG MYSQL_VERSION=8.0.3
+FROM mysql/mysql-server:${MYSQL_VERSION}
 
 MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
 

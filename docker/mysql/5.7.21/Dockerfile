@@ -1,5 +1,5 @@
-ARG MYSQL5_VERSION=5.7.21
-FROM mysql/mysql-server:${MYSQL5_VERSION}
+ARG MYSQL_VERSION=5.7.21
+FROM mysql/mysql-server:${MYSQL_VERSION}
 
 MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
 
