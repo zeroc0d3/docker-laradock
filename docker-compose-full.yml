@@ -94,6 +94,32 @@ services:
       - backend
 
 #================================================================================================
+# MONGODB
+#================================================================================================
+  mongodb:
+    restart: always
+    build:
+      context: ./docker/mongodb/${MONGO_VERSION}
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_MONGODB}:/etc/mongodb.conf
+      - ${DATABASE_MONGODB}/db:/data/db                    # volume for data
+      - ${DATABASE_MONGODB}/configdb:/data/configdb        # volume for config
+      - ${DATABASE_MONGODB}:/var/lib/mongodb
+      - ${LOG_MONGODB}:/var/log/mongodb/mongod.log         # log mongodb
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_HOST=${MONGO_INITDB_ROOT_HOST}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+    networks:
+      - backend
+      
+#================================================================================================
 # MYSQL
 #================================================================================================
   mysql:
@@ -252,6 +278,8 @@ volumes:
     driver: "local"
   mariadb:
     driver: "local"
+  mongodb:
+    driver: "local"
   mysql:
     driver: "local"
   nginx:
@@ -259,6 +287,8 @@ volumes:
   percona:
     driver: "local"
   phpmyadmin:
+    driver: "local"
+  postgresql:
     driver: "local"
   workspace:
     driver: "local"

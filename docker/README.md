@@ -14,8 +14,8 @@ Laradock docker container list
 * - [X] debian mysql 8.0 (mysql8).
 * - [X] debian mariadb 10.3 (mariadb10).
 * - [X] debian percona 5.7 (percona5).
-* - [ ] debian postgresql 9.6 (postgres9).
-* - [ ] debian postgresql 10 (postgres10).
+* - [X] debian postgresql 9.6 (postgres9).
+* - [X] debian postgresql 10 (postgres10).
 * - [ ] debian mongodb 3.6 (mongodb3).
 
 ### Database Tools
