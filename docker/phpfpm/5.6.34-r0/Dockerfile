@@ -1,4 +1,4 @@
-ARG PHP5_VERSION=5.6.34-r0
+ARG PHP_VERSION=5.6.34-r0
 FROM bhuisgen/alpine-base-consul:latest
 
 MAINTAINER "Boris HUISGEN <bhuisgen@hbis.fr>"
@@ -7,7 +7,7 @@ RUN mkdir -p /var/www && \
     addgroup -g 82 -S www-data && \
     adduser -u 82 -S -D -g "" -G www-data www-data
 
-ENV PHP5_VERSION=${PHP5_VERSION}
+ENV PHP_VERSION=${PHP_VERSION}
 
 RUN apk add --update --no-cache \
     ca-certificates \
