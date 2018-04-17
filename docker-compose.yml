@@ -3,43 +3,6 @@ version: '3.2'
 services:
 
 #================================================================================================
-# CORE-BASE
-#================================================================================================
-  base:
-    restart: always
-    build:
-      context: ./docker/core-base
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - ALPINE_VERSION=${ALPINE_VERSION}
-      - S6OVERLAY_VERSION=${S6OVERLAY_VERSION}
-      - S6_BEHAVIOUR_IF_STAGE2_FAILS=${S6_BEHAVIOUR_IF_STAGE2_FAILS}
-      - LANG=${LANG}
-      - LC_ALL=${LC_ALL}
-      - LANGUAGE=${LANGUAGE}
-      - TERM=${TERM}
-
-#================================================================================================
-# CORE-BASE-CONSUL
-#================================================================================================
-  base-consul:
-    restart: always
-    build:
-      context: ./docker/core-base-consul
-    ports:
-      - "9999:9999"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - CONSULTEMPLATE_VERSION=${CONSULTEMPLATE_VERSION}
-      - CONSUL_AGENT=172.16.0.1                                 # agent hostname
-      - CONSUL_PORT=8500                                        # agent port
-      - CONSUL_TLS=0                                            # enable TLS
-      - CONSUL_SERVICENAME=base-consul                          # service name to register
-      - CONSUL_SERVICEPORT=9999                                 # service port
-
-#================================================================================================
 # CORE-CONSUL
 #================================================================================================
   consul:
@@ -99,8 +62,7 @@ services:
   mysql:
     restart: always
     build:
-      context: ./docker/mysql/${MYSQL5_VERSION}
-      # context: ./docker/mysql/${MYSQL8_VERSION}
+      context: ./docker/mysql/${MYSQL_VERSION}
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
@@ -110,13 +72,12 @@ services:
       - ${CONFIG_MYSQL}:/etc/my.cnf                           # my.cnf mysql
       - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/docker.cnf   # docker.cnf mysql
     environment:
-      - MYSQL_VERSION=${MYSQL5_VERSION}
-      #- MYSQL_VERSION=${MYSQL8_VERSION}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}            # root password
-      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                    # grant user hostmask (optional)
-      - MYSQL_DATABASE=${MYSQL_DATABASE}                      # create database (optional)
-      - MYSQL_USER=${MYSQL_USER}                              # grant user name (optional)
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}                      # grant user password (optional)
+      - MYSQL_VERSION=${MYSQL_VERSION}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                 # grant user hostmask (optional)
+      - MYSQL_DATABASE=${MYSQL_DATABASE}                   # create database (optional)
+      - MYSQL_USER=${MYSQL_USER}                           # grant user name (optional)
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}                   # grant user password (optional)
     networks:
       - backend
 
@@ -143,18 +104,62 @@ services:
       - backend
 
 #================================================================================================
+# PERCONA
+#================================================================================================
+  percona:
+    restart: always
+    build:
+      context: ./docker/percona/${PERCONA_VERSION}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATABASE_PERCONA}:/var/lib/mysql                    # volume for data
+      - ${LOG_MYSQL}:/var/log/mysql                           # log mysql
+      - ${CONFIG_MYSQL}:/etc/my.cnf                           # my.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/docker.cnf   # docker.cnf mysql
+    environment:
+      - MYSQL_VERSION=${PERCONA_VERSION}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                 # grant user hostmask (optional)
+      - MYSQL_DATABASE=${MYSQL_DATABASE}                   # create database (optional)
+      - MYSQL_USER=${MYSQL_USER}                           # grant user name (optional)
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}                   # grant user password (optional)
+    networks:
+      - backend
+
+#================================================================================================
+# PHPMYADMIN
+#================================================================================================
+  phpmyadmin:
+    restart: always
+    build:
+      context: ./docker/phpmyadmin/${PHPMYADMIN_VERSION}
+    ports:
+      - "${PHPMYADMIN_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${SESSION_PHPMYADMIN}:/sessions                       # volume for sessions
+    environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
+      - PHPMYADMIN_VERSION=${PHPMYADMIN_VERSION}
+      - PMA_ARBITRARY=${PMA_ARBITRARY}
+      - PMA_HOST=${PMA_HOST}
+      - PMA_PORT=${PMA_PORT}
+      - PMA_USER=${PMA_USER}
+      - PMA_PASSWORD=${PMA_PASSWORD}
+    networks:
+      - backend
+
+#================================================================================================
 # WORKSPACE
 #================================================================================================
   workspace:
     restart: always
     build:
-      #context: ./docker/phpfpm/${PHP5_VERSION}
-      context: ./docker/phpfpm/${PHP7_VERSION}
+      context: ./docker/phpfpm/${PHP_VERSION}
     links:
-      #- mysql           # uncomment, if you're using mysql
-      - mariadb          # uncomment, if you're using mariadb
-      #- postgresql      # uncomment, if you're using postgresql
-      #- mongodb         # uncomment, if you're using mongodb
+      - ${DEFAULT_DATABASE}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
@@ -166,7 +171,7 @@ services:
       - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
       - ${WORKSPACE}:/var/www                                                       # volume for data
     environment:
-      - PHP_VERSION=${PHP7_VERSION}
+      - PHP_VERSION=${PHP_VERSION}
       - XDEBUG_VERSION=${XDEBUG_VERSION}
       - DEBUG=1
     networks:
@@ -192,6 +197,10 @@ volumes:
   mysql:
     driver: "local"
   nginx:
+    driver: "local"
+  percona:
+    driver: "local"
+  phpmyadmin:
     driver: "local"
   workspace:
     driver: "local"
