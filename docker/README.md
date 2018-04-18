@@ -12,11 +12,11 @@ Laradock docker container list
 ### Database Container
 * - [X] debian mysql 5.7 (mysql5).
 * - [X] debian mysql 8.0 (mysql8).
-* - [X] debian mariadb 10.3 (mariadb10).
-* - [X] debian percona 5.7 (percona5).
+* - [X] debian mariadb 10.2 / 10.3 (mariadb10).
+* - [X] debian percona 5.6 / 5.7 (percona5).
 * - [X] debian postgresql 9.6 (postgres9).
 * - [X] debian postgresql 10 (postgres10).
-* - [X] debian mongodb 3.6 (mongodb3).
+* - [X] debian mongodb 3.4 / 3.6 / 3.7 (mongodb3).
 
 ### Database Tools
 * - [X] alpine adminer (adminer).
@@ -28,4 +28,6 @@ Laradock docker container list
 * - [ ] alpine apache2 (apache2).
 
 ### Others
-* - [ ] aerospike.
+* - [ ] debian aerospike.
+* - [X] alpine spark.
+* - [X] alpine terraform. 

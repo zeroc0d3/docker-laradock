@@ -202,7 +202,7 @@ services:
       - "${PHPMYADMIN_PORT}:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${SESSION_PHPMYADMIN}:/sessions                       # volume for sessions
+      - ${SESSION_PHPMYADMIN}:/sessions                    # volume for sessions
     environment:
       - ALPINE_VERSION=${ALPINE_VERSION}
       - PHPMYADMIN_VERSION=${PHPMYADMIN_VERSION}
@@ -234,7 +234,85 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}                       # grant user password (optional)
     networks:
       - backend
-      
+
+#================================================================================================
+# SPARK
+#================================================================================================
+  spark-master:
+    restart: always
+    depends_on:
+      - consul
+    build:
+      context: ./docker/spark/${SPARK_VERSION}
+    expose:
+      - 7001
+      - 7002
+      - 7003
+      - 7004
+      - 7005
+      - 7006
+      - 7077
+      - 6066
+    ports:
+      - "4040:4040"
+      - "6066:6066"
+      - "7077:7077"
+      - "${SPARK_CONSUL_SERVICEPORT_MASTER}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SPARK_HOME=${DATABASE_SPARK_MASTER}
+      - SPARK_VERSION=${SPARK_VERSION}
+      - HADOOP_VERSION=${HADOOP_VERSION}
+      - CONSUL_AGENT=consul
+      - CONSUL_SERVICENAME=${SPARK_CONSUL_SERVICENAME_MASTER}
+      - CONSUL_SERVICETAGS=${SPARK_CONSUL_SERVICETAGS_MASTER}
+      - CONSUL_SERVICEPORT=${SPARK_CONSUL_SERVICEPORT_MASTER}
+      - CONSUL_CHECKTYPE=${SPARK_CONSUL_CHECKTYPE_MASTER}
+
+  spark-worker:
+    restart: always
+    depends_on:
+      - consul
+    build:
+      context: ./docker/spark/${SPARK_VERSION}
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - "${SPARK_CONSUL_SERVICEPORT_WORKER}:8081"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SPARK_HOME=${DATABASE_SPARK_WORKER}
+      - SPARK_VERSION=${SPARK_VERSION}
+      - HADOOP_VERSION=${HADOOP_VERSION}
+      - CONSUL_AGENT=consul
+      - CONSUL_SERVICENAME=${SPARK_CONSUL_SERVICENAME_WORKER}
+      - CONSUL_SERVICETAGS=${SPARK_CONSUL_SERVICETAGS_WORKER}
+      - CONSUL_SERVICEPORT=${SPARK_CONSUL_SERVICEPORT_WORKER}
+      - CONSUL_CHECKTYPE=${SPARK_CONSUL_CHECKTYPE_WORKER}
+      - SPARK_MASTERURL=${SPARK_MASTERURL}
+
+#================================================================================================
+# TERRAFORM
+#================================================================================================
+  terraform:
+    restart: always
+    build:
+      context: ./docker/terraform/${TERRAFORM_VERSION}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATABASE_TERRAFORM}:/data                        # volume for data
+    environment:
+      - TERRAFORM_VERSION=${TERRAFORM_VERSION}
+    networks:
+      - backend
+
 #================================================================================================
 # WORKSPACE
 #================================================================================================
@@ -289,6 +367,14 @@ volumes:
   phpmyadmin:
     driver: "local"
   postgresql:
+    driver: "local"
+  pgadmin4:
+    driver: "local"
+  spark-master:
+    driver: "local"
+  spark-worker:
+    driver: "local"
+  terraform:
     driver: "local"
   workspace:
     driver: "local"
