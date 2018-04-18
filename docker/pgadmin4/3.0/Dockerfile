@@ -1,0 +1,9 @@
+ARG PGADMIN4_VERSION=3.0
+FROM dpage/pgadmin4:${PGADMIN4_VERSION}
+
+MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
+
+ENV PGADMIN_DEFAULT_EMAIL="user@domain.com" \
+    PGADMIN_DEFAULT_PASSWORD="password""
+
+EXPOSE 80
