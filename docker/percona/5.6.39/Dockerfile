@@ -1,7 +1,26 @@
 ARG PERCONA_VERSION=5.6.39
 FROM percona:${PERCONA_VERSION}
 
-MAINTAINER "ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>"
+# ================================================================================================
+#  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
+#               ZeroC0D3 Engineer <zeroc0d3.0912@gmail.com>
+# ================================================================================================
+#  Core Contributors:
+#  - Mahmoud Zalt @mahmoudz
+#  - Bo-Yi Wu @appleboy
+#  - Philippe Trépanier @philtrep
+#  - Mike Erickson @mikeerickson
+#  - Dwi Fahni Denni @zeroc0d3
+#  - Thor Erik @thorerik
+#  - Winfried van Loon @winfried-van-loon
+#  - TJ Miller @sixlive
+#  - Yu-Lung Shao (Allen) @bestlong
+#  - Milan Urukalo @urukalo
+#  - Vince Chu @vwchu
+#  - Huadong Zuo @zuohuadong
+# ================================================================================================
+
+MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
 ENV MYSQL_ROOT_PASSWORD="password" \
     MYSQL_ROOT_HOST="localhost" \
