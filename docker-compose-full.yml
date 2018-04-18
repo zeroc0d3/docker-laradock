@@ -174,7 +174,7 @@ services:
     build:
       context: ./docker/percona/${PERCONA_VERSION}
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${PERCONA_PORT}:3306"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATABASE_PERCONA}:/var/lib/mysql                    # volume for data
