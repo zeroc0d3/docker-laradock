@@ -1,5 +1,6 @@
+ARG ALPINE_VERSION=3.6
 ARG PHPMYADMIN_VERSION=4.8.0
-FROM phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION}
+FROM alpine:${ALPINE_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
@@ -30,14 +31,20 @@ ENV PMA_ARBITRARY="1" \
     PMA_USER="laradock" \
     PMA_PASSWORD="password"
 
-COPY ./rootfs/run.sh /run.sh
-RUN chmod u+rwx /run.sh
+RUN apk add --update curl tar zip unzip && \
+    mkdir -p /var/www && \
+    mkdir -p /sessions && \
+    # curl -sSL https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin-${PHPMYADMIN_VERSION}-english.tar.gz | \
+    #    tar -xzo -C /var/www --strip-components 1 && \
+    curl -o /var/www -sSL https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.zip | \
+       unzip /var/www/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.zip && \
+    apk del curl tar && \
+    rm -rf /var/cache/apk/*
 
-RUN mkdir -p /sessions \
-    && mkdir -p /www/tmp \
-    && chmod -R 777 /www/tmp
-
+# We expose PhpMyAdmin on port 80 (PhpMyAdmin's default)
 EXPOSE 80
 
-ENTRYPOINT [ "/run.sh" ]
-CMD ["phpmyadmin"]
+ENTRYPOINT ["/bin/sh"]
+CMD []
+VOLUME ["/var/www", "/sessions"]
+

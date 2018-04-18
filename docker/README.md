@@ -20,8 +20,8 @@ Laradock docker container list
 
 ### Database Tools
 * - [X] alpine adminer (adminer).
-* - [X] alpine phpmyadmin (phpmyadmin).
-* - [ ] alpine pgadmin (pgadmin).
+* - [X] ubuntu phpmyadmin (phpmyadmin).
+* - [X] ubuntu pgadmin4 release 3.0 (pgadmin4).
 
 ### Webserver
 * - [X] alpine nginx (nginx).
