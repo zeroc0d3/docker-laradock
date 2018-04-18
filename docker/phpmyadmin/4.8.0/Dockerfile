@@ -32,7 +32,8 @@ ENV PMA_ARBITRARY="1" \
     PMA_PASSWORD="password"
 
 RUN apk add --update curl tar zip unzip && \
-    mkdir /var/www && \
+    mkdir -p /var/www && \
+    mkdir -p /sessions && \
     # curl -sSL https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin-${PHPMYADMIN_VERSION}-english.tar.gz | \
     #    tar -xzo -C /var/www --strip-components 1 && \
     curl -o /var/www -sSL https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.zip | \
