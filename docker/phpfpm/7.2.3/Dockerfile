@@ -1,5 +1,6 @@
 ARG PHP_VERSION=7.2.3
-ARG ALPINE_VERSION=3.6
+ARG ALPINE_VERSION=3.7
+ARG XDEBUG_VERSION=2.6.0
 FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 
 # ================================================================================================
@@ -25,16 +26,30 @@ MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
 ENV PHP_VERSION=${PHP_VERSION} \
     ALPINE_VERSION=${ALPINE_VERSION} \
-    XDEBUG_VERSION=2.6.0
+    XDEBUG_VERSION=${XDEBUG_VERSION}
 
 # Install xdebug
 COPY ./docker-php-pecl-install /usr/local/bin/
 RUN apk add --no-cache $PHPIZE_DEPS \
+                       libmcrypt-dev \
+            		   libltdl \
+            		   zlib \
+            		   icu-dev \
+            		   g++ \
+            		   gettext \
+            		   curl-dev \
+            		   openssl-dev \
+            		   libcurl \
     && pecl install xdebug-${XDEBUG_VERSION} \
     && docker-php-ext-enable xdebug \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install iconv \
-    && docker-php-ext-install mcrypt \
+    && docker-php-ext-install bz2  \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install mysqli \
+    # && docker-php-ext-configure mcrypt \
+    # && docker-php-ext-install mcrypt \
+    # && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
     && docker-php-ext-install mbstring \
