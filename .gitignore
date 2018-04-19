@@ -1,6 +1,7 @@
 .idea
 .env
 
+data
 database
 log
 session

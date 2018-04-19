@@ -19,7 +19,7 @@ USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
 CONTAINER_PRODUCTION="consul workspace nginx adminer phpmyadmin pgadmin4 mariadb mysql percona postgresql mongodb"
-CONTAINER_DEVELOPMENT="consul workspace nginx adminer phpmyadmin pgadmin4 mariadb percona postgresql mongodb"
+CONTAINER_DEVELOPMENT="consul workspace nginx adminer phpmyadmin pgadmin4 mariadb postgresql mongodb"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300

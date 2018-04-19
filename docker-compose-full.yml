@@ -71,7 +71,7 @@ services:
       - ADMINER_VERSION=${ADMINER_VERSION}
       - INSTALL_MSSQL=${INSTALL_MSSQL}
     networks:
-      - backend
+      - frontend
 
 #================================================================================================
 # MARIADB
@@ -169,6 +169,7 @@ services:
       - NGINX_VERSION=${NGINX_VERSION}
     networks:
       - backend
+      - frontend
 
 #================================================================================================
 # PERCONA
@@ -204,6 +205,8 @@ services:
       context: ./docker/pgadmin4/${PGADMIN_VERSION}
     ports:
       - "${PGADMIN_PORT}:80"
+    depends_on:
+      - postgresql
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${SESSION_PGADMIN}:/sessions                       # volume for sessions
@@ -211,6 +214,31 @@ services:
       - PGADMIN_VERSION=${PGADMIN_VERSION}
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - frontend
+
+#================================================================================================
+# PHP-FPM
+#================================================================================================
+  phpfpm:
+    restart: always
+    build:
+      context: ./docker/phpfpm/${PHP_VERSION}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
+      - ${CONFIG_PHPFPM_INI}:/usr/local/etc/php/php.ini                             # ini path
+      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini    # xdebug config
+      - ${LOG_PHPFPM}:/var/log/phpfpm                                               # log phpfpm
+      - ${VENDOR_COMPOSER}:/usr/local/bin/composer                                  # vendor composer
+      - ${VENDOR_DEPLOYER}:/usr/local/bin/dep                                       # vendor deployer
+      - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
+      - ${WORKSPACE}:/var/www                                                       # volume for data
+    environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
+      - PHP_VERSION=${PHP_VERSION}
+      - XDEBUG_VERSION=${XDEBUG_VERSION}
+      - DEBUG=1
     networks:
       - backend
 
@@ -223,11 +251,16 @@ services:
       context: ./docker/phpmyadmin/${PHPMYADMIN_VERSION}
     ports:
       - "${PHPMYADMIN_PORT}:80"
+    depends_on:
+      - mysql
+      - mariadb
+      - percona
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${SESSION_PHPMYADMIN}:/sessions                    # volume for sessions
     environment:
       - ALPINE_VERSION=${ALPINE_VERSION}
+      - PHP_VERSION=${PHP_VERSION}
       - PHPMYADMIN_VERSION=${PHPMYADMIN_VERSION}
       - PMA_ARBITRARY=${PMA_ARBITRARY}
       - PMA_HOST=${PMA_HOST}
@@ -235,7 +268,7 @@ services:
       - PMA_USER=${PMA_USER}
       - PMA_PASSWORD=${PMA_PASSWORD}
     networks:
-      - backend
+      - frontend
 
 #================================================================================================
 # POSTGRESQL
@@ -292,6 +325,8 @@ services:
       - CONSUL_SERVICETAGS=${SPARK_CONSUL_SERVICETAGS_MASTER}
       - CONSUL_SERVICEPORT=${SPARK_CONSUL_SERVICEPORT_MASTER}
       - CONSUL_CHECKTYPE=${SPARK_CONSUL_CHECKTYPE_MASTER}
+    networks:
+      - frontend
 
   spark-worker:
     restart: always
@@ -320,6 +355,8 @@ services:
       - CONSUL_SERVICEPORT=${SPARK_CONSUL_SERVICEPORT_WORKER}
       - CONSUL_CHECKTYPE=${SPARK_CONSUL_CHECKTYPE_WORKER}
       - SPARK_MASTERURL=${SPARK_MASTERURL}
+    networks:
+      - frontend
 
 #================================================================================================
 # TERRAFORM
@@ -356,6 +393,7 @@ services:
       - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
       - ${WORKSPACE}:/var/www                                                       # volume for data
     environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
       - PHP_VERSION=${PHP_VERSION}
       - XDEBUG_VERSION=${XDEBUG_VERSION}
       - DEBUG=1
@@ -367,6 +405,8 @@ services:
 #================================================================================================
 networks:
   backend:
+    driver: "bridge"
+  frontend:
     driver: "bridge"
 
 #================================================================================================
@@ -388,6 +428,8 @@ volumes:
   percona:
     driver: "local"
   pgadmin4:
+    driver: "local"
+  phpfpm:
     driver: "local"
   phpmyadmin:
     driver: "local"
