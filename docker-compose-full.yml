@@ -258,6 +258,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${SESSION_PHPMYADMIN}:/sessions                    # volume for sessions
+      - ${CONFIG_PHPMYADMIN}:/www/config.inc.php           # volume for config phpmyadmin
     environment:
       - ALPINE_VERSION=${ALPINE_VERSION}
       - PHP_VERSION=${PHP_VERSION}
