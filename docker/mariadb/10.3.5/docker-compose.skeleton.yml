@@ -1,0 +1,24 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# MARIADB
+#================================================================================================
+  mariadb:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "${MARIADB_PORT}:3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATABASE_MARIADB}:/var/lib/mysql                 # volume for data
+      - ${LOG_MARIADB}:/var/log/mysql                      # log mariadb
+    environment:
+      - MARIADB_VERSION=${MARIADB_VERSION}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}     # root password
+      - MARIADB_ROOT_HOST=${MARIADB_ROOT_HOST}             # grant user hostmask (optional)
+      - MARIADB_DATABASE=${MARIADB_DATABASE}               # create database (optional)
+      - MARIADB_USER=${MARIADB_USER}                       # grant user name (optional)
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}               # grant user password (optional)

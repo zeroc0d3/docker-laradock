@@ -1,4 +1,4 @@
-IMAGE = bhuisgen/alpine-terraform
+IMAGE = laradock/terraform
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

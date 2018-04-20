@@ -1,4 +1,4 @@
-DOCKER_REPO = phpmyadmin/phpmyadmin
+DOCKER_REPO = laradock/phpmyadmin
 
 .PHONY: all build build_nc run logs clean stop rm prune
 

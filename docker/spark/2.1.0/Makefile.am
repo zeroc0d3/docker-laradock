@@ -1,4 +1,4 @@
-IMAGE = bhuisgen/alpine-spark
+IMAGE = laradock/spark
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

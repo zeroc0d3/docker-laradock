@@ -10,7 +10,7 @@ services:
     environment:
         - CONSUL_OPTIONS=-server -bootstrap-expect 1 -client 0.0.0.0 -ui    # minimal server options
 
-  php:
+  phpfpm:
     depends_on:
       - consul
     image: bhuisgen/alpine-php5

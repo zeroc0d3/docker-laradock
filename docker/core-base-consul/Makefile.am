@@ -1,4 +1,4 @@
-IMAGE = bhuisgen/alpine-base-consul
+IMAGE = laradock/core-base-consul
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

@@ -1,0 +1,22 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# PGADMIN4
+#================================================================================================
+  pgadmin4:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "${PGADMIN_PORT}:80"
+    depends_on:
+      - postgresql
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${SESSION_PGADMIN}:/sessions                       # volume for sessions
+    environment:
+      - PGADMIN_VERSION=${PGADMIN_VERSION}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}

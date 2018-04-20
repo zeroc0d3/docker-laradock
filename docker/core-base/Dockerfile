@@ -6,18 +6,18 @@ FROM alpine:${ALPINE_VERSION}
 #               Boris HUISGEN <bhuisgen@hbis.fr>
 # ================================================================================================
 #  Core Contributors:
-#  - Mahmoud Zalt @mahmoudz
-#  - Bo-Yi Wu @appleboy
-#  - Philippe Trépanier @philtrep
-#  - Mike Erickson @mikeerickson
-#  - Dwi Fahni Denni @zeroc0d3
-#  - Thor Erik @thorerik
-#  - Winfried van Loon @winfried-van-loon
-#  - TJ Miller @sixlive
-#  - Yu-Lung Shao (Allen) @bestlong
-#  - Milan Urukalo @urukalo
-#  - Vince Chu @vwchu
-#  - Huadong Zuo @zuohuadong
+#   - Mahmoud Zalt @mahmoudz
+#   - Bo-Yi Wu @appleboy
+#   - Philippe Trépanier @philtrep
+#   - Mike Erickson @mikeerickson
+#   - Dwi Fahni Denni @zeroc0d3
+#   - Thor Erik @thorerik
+#   - Winfried van Loon @winfried-van-loon
+#   - TJ Miller @sixlive
+#   - Yu-Lung Shao (Allen) @bestlong
+#   - Milan Urukalo @urukalo
+#   - Vince Chu @vwchu
+#   - Huadong Zuo @zuohuadong
 # ================================================================================================
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
