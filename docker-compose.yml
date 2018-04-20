@@ -117,7 +117,7 @@ services:
   nginx:
     restart: always
     build:
-      context: ./docker/nginx
+      context: ./docker/nginx/${NGINX_VERSION}
     links:
       - workspace
     ports:
