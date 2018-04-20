@@ -8,7 +8,7 @@ services:
   nginx:
     restart: always
     build:
-      context: .
+      context: ..
     links:
       - workspace
     ports:

@@ -1,6 +1,5 @@
 ARG PHP_VERSION=7.2.3
 ARG ALPINE_VERSION=3.7
-ARG XDEBUG_VERSION=2.6.0
 FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 
 # ================================================================================================
@@ -26,7 +25,7 @@ MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
 ENV PHP_VERSION=${PHP_VERSION} \
     ALPINE_VERSION=${ALPINE_VERSION} \
-    XDEBUG_VERSION=${XDEBUG_VERSION}
+    XDEBUG_VERSION=2.6.0
 
 # Install xdebug
 COPY ./docker-php-pecl-install /usr/local/bin/
