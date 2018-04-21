@@ -1,4 +1,4 @@
-IMAGE = laradock/core-consul
+IMAGE = dockerframework/core-consul
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true
