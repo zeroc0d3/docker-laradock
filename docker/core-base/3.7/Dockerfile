@@ -1,4 +1,4 @@
-ARG ALPINE_VERSION=3.6
+ARG ALPINE_VERSION=3.7
 FROM alpine:${ALPINE_VERSION}
 
 # ================================================================================================
@@ -22,7 +22,7 @@ FROM alpine:${ALPINE_VERSION}
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV S6OVERLAY_VERSION=v1.20.0.0 \
+ENV S6OVERLAY_VERSION=v1.21.4.0 \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=1 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
@@ -36,4 +36,4 @@ RUN apk update && \
     apk del tar && \
     rm -rf /var/cache/apk/*
 
-COPY rootfs/ /
+COPY rootfs /

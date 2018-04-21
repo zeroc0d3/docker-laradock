@@ -1,4 +1,5 @@
-FROM bhuisgen/alpine-base:latest
+ARG ALPINE_VERSION=3.6
+FROM alpine:${ALPINE_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Alpine (https://github.com/bhuisgen/docker-alpine)
@@ -21,20 +22,18 @@ FROM bhuisgen/alpine-base:latest
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV CONSULTEMPLATE_VERSION=0.19.4
+ENV S6OVERLAY_VERSION=v1.20.0.0 \
+    S6_BEHAVIOUR_IF_STAGE2_FAILS=1 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    TERM=xterm
 
-RUN mkdir -p /var/lib/consul && \
-    addgroup -g 500 -S consul && \
-    adduser -u 500 -S -D -g "" -G consul -s /sbin/nologin -h /var/lib/consul consul && \
-    chown -R consul:consul /var/lib/consul
-
-RUN apk add --update zip && \
-    curl -sSL https://releases.hashicorp.com/consul-template/${CONSULTEMPLATE_VERSION}/consul-template_${CONSULTEMPLATE_VERSION}_linux_amd64.zip -o /tmp/consul-template.zip && \
-    unzip /tmp/consul-template.zip -d /bin && \
-    rm /tmp/consul-template.zip && \
-    apk del zip && \
+RUN apk update && \
+    apk upgrade && \
+    apk add bash bind-tools ca-certificates curl jq tar && \
+    curl -sSL https://github.com/just-containers/s6-overlay/releases/download/${S6OVERLAY_VERSION}/s6-overlay-amd64.tar.gz | tar xz -C / && \
+    apk del tar && \
     rm -rf /var/cache/apk/*
 
-COPY rootfs/ /
-
-HEALTHCHECK CMD /etc/cont-consul/check || exit 1
+COPY rootfs /

@@ -21,8 +21,8 @@ FROM bhuisgen/alpine-base:latest
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV CONSUL_VERSION=0.9.3 \
-    CONSULTEMPLATE_VERSION=0.19.3
+ENV CONSUL_VERSION=1.0.7 \
+    CONSULTEMPLATE_VERSION=0.19.4
 
 RUN mkdir -p /var/lib/consul && \
     addgroup -g 500 -S consul && \
