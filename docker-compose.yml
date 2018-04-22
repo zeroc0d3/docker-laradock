@@ -43,14 +43,17 @@ services:
     restart: always
     build:
       context: ./docker/aerospike/${AEROSPIKE_VERSION}
+    links:
+      - workspace
     ports:
-      - "3100:3000"
-      - "3101:3001"
-      - "3102:3002"
-      - "3103:3003"
+      - "${AEROSPIKE_SERVICE_PORT}:3000"
+      - "${AEROSPIKE_FABRIC_PORT}:3001"
+      - "${AEROSPIKE_HEARTBEAT_PORT}:3002"
+      - "${AEROSPIKE_INFO_PORT}:3003"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_AEROSPIKE}:/etc/aerospike/aerospike.conf  # volume for config
+      - ${DATA_AEROSPIKE}:/opt/aerospike/data              # volume for data
     environment:
       - AEROSPIKE_VERSION=${AEROSPIKE_VERSION}
     networks:
@@ -67,7 +70,7 @@ services:
       - "${MARIADB_PORT}:3306"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_MARIADB}:/var/lib/mysql                 # volume for data
+      - ${DATA_MARIADB}:/var/lib/mysql                     # volume for data
       - ${LOG_MARIADB}:/var/log/mysql                      # log mariadb
     environment:
       - MARIADB_VERSION=${MARIADB_VERSION}
@@ -91,9 +94,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_MONGODB}:/etc/mongodb.conf
-      - ${DATABASE_MONGODB}/db:/data/db                    # volume for data
-      - ${DATABASE_MONGODB}/configdb:/data/configdb        # volume for config
-      - ${DATABASE_MONGODB}:/var/lib/mongodb
+      - ${DATA_MONGODB}/db:/data/db                        # volume for data
+      - ${DATA_MONGODB}/configdb:/data/configdb            # volume for config
+      - ${DATA_MONGODB}:/var/lib/mongodb
       - ${LOG_MONGODB}:/var/log/mongodb/mongod.log         # log mongodb
     environment:
       - MONGO_VERSION=${MONGO_VERSION}
@@ -117,10 +120,10 @@ services:
       - "${MYSQL_PORT}:3306"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_MYSQL}:/var/lib/mysql                      # volume for data
-      - ${LOG_MYSQL}:/var/log/mysql                           # log mysql
       - ${CONFIG_MYSQL}:/etc/my.cnf                           # my.cnf mysql
       - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/docker.cnf   # docker.cnf mysql
+      - ${DATA_MYSQL}:/var/lib/mysql                          # volume for data
+      - ${LOG_MYSQL}:/var/log/mysql                           # log mysql
     environment:
       - MYSQL_VERSION=${MYSQL_VERSION}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
@@ -165,10 +168,10 @@ services:
       - "${PERCONA_PORT}:3306"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_PERCONA}:/var/lib/mysql                    # volume for data
-      - ${LOG_PERCONA}:/var/log/mysql                         # log percona
       - ${CONFIG_MYSQL}:/etc/my.cnf                           # my.cnf mysql
       - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/docker.cnf   # docker.cnf mysql
+      - ${DATA_PERCONA}:/var/lib/mysql                        # volume for data
+      - ${LOG_PERCONA}:/var/log/mysql                         # log percona
     environment:
       - MYSQL_VERSION=${PERCONA_VERSION}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
@@ -265,7 +268,7 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_POSTGRESQL}/postgres:/var/lib/postgresql          # volume for data
+      - ${DATA_POSTGRESQL}/postgres:/var/lib/postgresql              # volume for data
     environment:
       - POSTGRES_VERSION=${POSTGRES_VERSION}
       - POSTGRES_ROOT_HOST=${POSTGRES_ROOT_HOST}                     # grant user hostmask (optional)
@@ -301,7 +304,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - SPARK_HOME=${DATABASE_SPARK_MASTER}
+      - SPARK_HOME=${DATA_SPARK_MASTER}
       - SPARK_VERSION=${SPARK_VERSION}
       - HADOOP_VERSION=${HADOOP_VERSION}
       - CONSUL_AGENT=consul
@@ -330,7 +333,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - SPARK_HOME=${DATABASE_SPARK_WORKER}
+      - SPARK_HOME=${DATA_SPARK_WORKER}
       - SPARK_VERSION=${SPARK_VERSION}
       - HADOOP_VERSION=${HADOOP_VERSION}
       - CONSUL_AGENT=consul
@@ -351,7 +354,7 @@ services:
       context: ./docker/terraform/${TERRAFORM_VERSION}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_TERRAFORM}:/data                        # volume for data
+      - ${DATA_TERRAFORM}:/data                            # volume for data
     environment:
       - TERRAFORM_VERSION=${TERRAFORM_VERSION}
     networks:
