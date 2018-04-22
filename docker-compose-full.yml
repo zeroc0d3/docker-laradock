@@ -7,8 +7,9 @@ services:
 #================================================================================================
   base:
     restart: always
-    build:
-      context: ./docker/core-base/${ALPINE_VERSION}
+    # build:
+    #   context: ./docker/core-base/${ALPINE_VERSION}
+    image: dockerframework/core-base
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -25,8 +26,9 @@ services:
 #================================================================================================
   base-consul:
     restart: always
-    build:
-      context: ./docker/core-base-consul
+    # build:
+    #   context: ./docker/core-base-consul
+    image: dockerframework/core-base-consul
     ports:
       - "9999:9999"
     volumes:
@@ -44,8 +46,9 @@ services:
 #================================================================================================
   consul:
     restart: always
-    build:
-      context: ./docker/core-consul
+    # build:
+    #   context: ./docker/core-consul
+    image: dockerframework/core-consul
     ports:
       - "8500:8500"
     volumes:

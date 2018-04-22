@@ -7,8 +7,9 @@ services:
 #================================================================================================
   consul:
     restart: always
-    build:
-      context: ./docker/core-consul
+    # build:
+    #   context: ./docker/core-consul
+    image: dockerframework/core-consul
     ports:
       - "8500:8500"
     volumes:
