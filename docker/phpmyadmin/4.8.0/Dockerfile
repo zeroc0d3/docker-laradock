@@ -1,5 +1,6 @@
 ARG PHP_VERSION=7.2.3
 ARG ALPINE_VERSION=3.7
+ARG PMA_DB_ENGINE="mysql"
 FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
 
 # ================================================================================================
@@ -28,7 +29,7 @@ ENV URL=https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin
 LABEL version=$PHPMYADMIN_VERSION
 
 ENV PMA_ARBITRARY="1"
-ENV PMA_HOST="mariadb" \
+ENV PMA_HOST=${PMA_DB_ENGINE} \
     PMA_USER="laradock" \
     PMA_PASSWORD="password" \
     PMA_ROOT_PASSWORD="password"
