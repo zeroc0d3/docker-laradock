@@ -37,6 +37,26 @@ services:
       - frontend
 
 #================================================================================================
+# AEROSPIKE
+#================================================================================================
+  aerospike:
+    restart: always
+    build:
+      context: ./docker/aerospike/${AEROSPIKE_VERSION}
+    ports:
+      - "3100:3000"
+      - "3101:3001"
+      - "3102:3002"
+      - "3103:3003"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_AEROSPIKE}:/etc/aerospike/aerospike.conf  # volume for config
+    environment:
+      - AEROSPIKE_VERSION=${AEROSPIKE_VERSION}
+    networks:
+      - backend
+
+#================================================================================================
 # MARIADB
 #================================================================================================
   mariadb:
@@ -160,12 +180,12 @@ services:
       - backend
 
 #================================================================================================
-# PGADMIN4
+# PGADMIN
 #================================================================================================
-  pgadmin4:
+  pgadmin:
     restart: always
     build:
-      context: ./docker/pgadmin4/${PGADMIN_VERSION}
+      context: ./docker/pgadmin/${PGADMIN_VERSION}
     ports:
       - "${PGADMIN_PORT}:80"
     depends_on:
@@ -381,6 +401,8 @@ volumes:
     driver: "local"
   adminer:
     driver: "local"
+  aerospike:
+    driver: "local"
   mariadb:
     driver: "local"
   mongodb:
@@ -391,7 +413,7 @@ volumes:
     driver: "local"
   percona:
     driver: "local"
-  pgadmin4:
+  pgadmin:
     driver: "local"
   phpfpm:
     driver: "local"
