@@ -1,5 +1,5 @@
 ARG MYSQL_VERSION=8.0.11
-FROM mysql/mysql:${MYSQL_VERSION}
+FROM mysql:${MYSQL_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)

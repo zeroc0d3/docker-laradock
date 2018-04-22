@@ -1,5 +1,5 @@
 ARG MYSQL_VERSION=5.7.22
-FROM mysql/mysql:${MYSQL_VERSION}
+FROM mysql:${MYSQL_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
