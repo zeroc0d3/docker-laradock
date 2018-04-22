@@ -71,6 +71,7 @@ services:
       - ADMINER_VERSION=${ADMINER_VERSION}
       - INSTALL_MSSQL=${INSTALL_MSSQL}
     networks:
+      - backend
       - frontend
 
 #================================================================================================
@@ -238,6 +239,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     networks:
+      - backend
       - frontend
 
 #================================================================================================
@@ -290,6 +292,7 @@ services:
       - MYSQL_PASSWORD=${PMA_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
     networks:
+      - backend
       - frontend
 
 #================================================================================================
