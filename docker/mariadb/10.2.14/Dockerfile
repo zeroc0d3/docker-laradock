@@ -22,11 +22,11 @@ FROM mariadb:${MARIADB_VERSION}
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV MARIADB_ROOT_PASSWORD="password" \
-    MARIADB_ROOT_HOST="localhost" \
-    MARIADB_DATABASE="laradock_mariadb" \
-    MARIADB_USER="laradock" \
-    MARIADB_PASSWORD="password"
+ENV MYSQL_ROOT_PASSWORD="password" \
+    MYSQL_ROOT_HOST="localhost" \
+    MYSQL_DATABASE="laradock_mariadb" \
+    MYSQL_USER="laradock" \
+    MYSQL_PASSWORD="password"
 
 VOLUME /var/lib/mysql
 
