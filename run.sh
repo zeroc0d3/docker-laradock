@@ -18,8 +18,8 @@ DAEMON_MODE="0"                      # (0 = disable daemon mode, 1 = running dae
 USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
-CONTAINER_PRODUCTION="consul workspace nginx adminer phpmyadmin pgadmin mariadb mysql percona postgresql mongodb"
-CONTAINER_DEVELOPMENT="consul workspace nginx adminer phpmyadmin pgadmin mariadb mysql percona postgresql mongodb"
+CONTAINER_PRODUCTION="consul workspace nginx adminer aerospike mariadb mongodb mysql percona pgadmin phpfpm phpmyadmin postgresql redis spark terraform"
+CONTAINER_DEVELOPMENT="consul workspace nginx adminer aerospike mariadb mongodb mysql percona pgadmin phpfpm phpmyadmin postgresql redis spark terraform"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300

@@ -28,9 +28,11 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
-$cfg['Servers'][$i]['host'] = 'mysql';   // mysql, mariadb, percona
+$cfg['Servers'][$i]['host'] = 'mariadb';   // mysql, mariadb, percona
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
+$cfg['Servers'][$i]['user'] = 'laradock';
+$cfg['Servers'][$i]['password'] = 'password';
 
 /**
  * phpMyAdmin configuration storage settings.
@@ -39,8 +41,8 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 /* User used to manipulate with storage */
 // $cfg['Servers'][$i]['controlhost'] = '';
 // $cfg['Servers'][$i]['controlport'] = '';
-// $cfg['Servers'][$i]['controluser'] = 'pma';
-// $cfg['Servers'][$i]['controlpass'] = 'pmapass';
+// $cfg['Servers'][$i]['controluser'] = 'laradock';
+// $cfg['Servers'][$i]['controlpass'] = 'password';
 
 /* Storage database and tables */
 // $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
@@ -63,8 +65,6 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 // $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
 // $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
 // $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
-$cfg['Servers'][$i]['user'] = 'laradock';
-$cfg['Servers'][$i]['password'] = 'password';
 
 /**
  * End of servers configuration
