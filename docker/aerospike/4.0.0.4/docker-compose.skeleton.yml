@@ -1,0 +1,21 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# AEROSPIKE
+#================================================================================================
+  aerospike:
+    restart: always
+    build:
+      context: ./docker/aerospike/${AEROSPIKE_VERSION}
+    ports:
+      - "3100:3000"
+      - "3101:3001"
+      - "3102:3002"
+      - "3103:3003"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_AEROSPIKE}:/etc/aerospike/aerospike.conf  # volume for config
+    environment:
+      - AEROSPIKE_VERSION=${AEROSPIKE_VERSION}

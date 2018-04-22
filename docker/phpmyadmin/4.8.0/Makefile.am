@@ -1,4 +1,4 @@
-IMAGE = laradock/phpmyadmin
+IMAGE = dockerframework/phpmyadmin
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

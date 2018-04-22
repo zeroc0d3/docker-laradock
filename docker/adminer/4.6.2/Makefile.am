@@ -1,4 +1,4 @@
-IMAGE = laradock/adminer
+IMAGE = dockerframework/adminer
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

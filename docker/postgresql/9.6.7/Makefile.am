@@ -1,4 +1,4 @@
-IMAGE = laradock/postgresql
+IMAGE = dockerframework/postgresql
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

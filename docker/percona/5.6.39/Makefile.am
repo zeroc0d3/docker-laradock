@@ -1,4 +1,4 @@
-IMAGE = laradock/percona
+IMAGE = dockerframework/percona
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

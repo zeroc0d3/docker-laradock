@@ -1,4 +1,4 @@
-IMAGE = laradock/mongodb
+IMAGE = dockerframework/mongodb
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

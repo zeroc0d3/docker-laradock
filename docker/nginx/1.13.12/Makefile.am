@@ -1,4 +1,4 @@
-IMAGE = laradock/nginx
+IMAGE = dockerframework/nginx
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

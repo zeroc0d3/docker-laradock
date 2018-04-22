@@ -1,4 +1,4 @@
-IMAGE = dockerframework/postgresql
+IMAGE = dockerframework/aerospike
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

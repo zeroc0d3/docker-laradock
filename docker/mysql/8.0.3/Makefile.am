@@ -1,4 +1,4 @@
-IMAGE = laradock/mysql
+IMAGE = dockerframework/mysql
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

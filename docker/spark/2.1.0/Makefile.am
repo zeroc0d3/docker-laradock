@@ -1,4 +1,4 @@
-IMAGE = laradock/spark
+IMAGE = dockerframework/spark
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

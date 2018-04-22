@@ -1,4 +1,4 @@
-IMAGE = laradock/terraform
+IMAGE = dockerframework/terraform
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true

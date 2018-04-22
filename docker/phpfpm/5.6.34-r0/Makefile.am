@@ -1,4 +1,4 @@
-IMAGE = laradock/phpfpm
+IMAGE = dockerframework/phpfpm
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true
