@@ -29,9 +29,14 @@ LABEL version=$PHPMYADMIN_VERSION
 
 ENV PMA_ARBITRARY="1"
 ENV PMA_HOST="mariadb" \
-    PMA_PORT="3306" \
     PMA_USER="laradock" \
-    PMA_PASSWORD="password"
+    PMA_PASSWORD="password" \
+    PMA_ROOT_PASSWORD="password"
+
+ENV MYSQL_HOST=${PMA_DB_ENGINE} \
+    MYSQL_USER=${PMA_USER} \
+    MYSQL_PASSWORD=${PMA_PASSWORD} \
+    MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
 
 RUN apk add --no-cache \
     nginx \
