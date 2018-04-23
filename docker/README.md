@@ -72,6 +72,10 @@ Customize port environments for docker-compose.yml
 * - [X] alpine phpmyadmin 4.8 (phpmyadmin).
 * - [X] ubuntu pgadmin4 release 3.0 (pgadmin).
 
+### Deployment Tools
+* - [X] ruby [capistrano](https://github.com/capistrano/capistrano)
+* - [X] php [deployer](https://github.com/deployphp/deployer)
+
 ### Monitoring
 * - [ ] ubuntu grafana (grafana).
 
