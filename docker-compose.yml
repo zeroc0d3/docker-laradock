@@ -76,11 +76,11 @@ services:
       - ${LOG_MARIADB}:/var/log/mysql                      # log mariadb
     environment:
       - MARIADB_VERSION=${MARIADB_VERSION}
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}       # root password
-      - MYSQL_ROOT_HOST=${MARIADB_ROOT_HOST}               # grant user hostmask (optional)
-      - MYSQL_DATABASE=${MARIADB_DATABASE}                 # create database (optional)
-      - MYSQL_USER=${MARIADB_USER}                         # grant user name (optional)
-      - MYSQL_PASSWORD=${MARIADB_PASSWORD}                 # grant user password (optional)
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                 # grant user hostmask (optional)
+      - MYSQL_DATABASE=${MYSQL_DATABASE}                   # create database (optional)
+      - MYSQL_USER=${MYSQL_USER}                           # grant user name (optional)
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}                   # grant user password (optional)
     networks:
       - backend
 
