@@ -1,6 +1,8 @@
 .idea
 .env
 
+cache
+cached
 data
 database
 log
