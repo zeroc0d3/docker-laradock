@@ -124,6 +124,23 @@ services:
       - backend
 
 #================================================================================================
+# MEMCACHED
+#================================================================================================
+  memcached:
+    restart: always
+    build:
+      context: ./docker/memcached/${MEMCACHED_VERSION}
+    ports:
+      - "${MEMCACHED_PORT}:11211"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CACHE_MEMCACHED}:/data                           # volume for data
+    environment:
+      - MEMCACHED_VERSION=${MEMCACHED_VERSION}
+    networks:
+      - backend
+
+#================================================================================================
 # MONGODB
 #================================================================================================
   mongodb:
@@ -331,7 +348,7 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CACHE_MEMCACHED}:/data                                     # volume for data
+      - ${CACHE_REDIS}:/data                               # volume for data
     environment:
       - REDIS_VERSION=${REDIS_VERSION}
     networks:
@@ -466,6 +483,8 @@ volumes:
   aerospike:
     driver: "local"
   mariadb:
+    driver: "local"
+  memcached:
     driver: "local"
   mongodb:
     driver: "local"

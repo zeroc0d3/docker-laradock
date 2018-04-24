@@ -1,0 +1,18 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# MEMCACHED
+#================================================================================================
+  memcached:
+    restart: always
+    build:
+      context: ./docker/memcached/${MEMCACHED_VERSION}
+    ports:
+      - "${MEMCACHED_PORT}:11211"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CACHE_MEMCACHED}:/data                           # volume for data
+    environment:
+      - MEMCACHED_VERSION=${MEMCACHED_VERSION}

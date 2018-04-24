@@ -20,6 +20,8 @@ Customize port environments for docker-compose.yml
 |   8106   |    3306   |  MySQL                           |
 |   8107   |    3306   |  Percona                         |
 +----------+-----------+----------------------------------+      
+|   8121   |   11211   |  Memcached                       |
++----------+-----------+----------------------------------+      
 |   8108   |   27017   |  MongoDB                         |
 +----------+-----------+----------------------------------+      
 |   8109   |      80   |  NginX                           |
@@ -54,7 +56,7 @@ Customize port environments for docker-compose.yml
 * - [X] alpine workspace phpfpm-7.2 (workspace).
 
 ### Cache Container
-* - [ ] alpine memcached 1.5 (memcached).
+* - [X] alpine memcached 1.5 (memcached).
 * - [X] alpine redis 3.2 (redis).
 * - [X] alpine redis 4.0 (redis).
 
