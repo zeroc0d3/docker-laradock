@@ -84,6 +84,19 @@ Customize port environments for docker-compose.yml
 ### Deployment Tools
 * - [X] ruby [capistrano](https://github.com/capistrano/capistrano)
 * - [X] php [deployer](https://github.com/deployphp/deployer)
+```
+Running Task Deployment Capistrano
+  type: [env] = production / staging
+    => cap [env] deploy
+    => cap [env] nginx:manual_restart
+    => cap [env] phpfpm:manual_restart
+    => cap [env] composer:install
+    => cap [env] composer:update
+    => cap [env] composer:dumpautoload
+    => cap [env] artisan:clear_view
+    => cap [env] artisan:clear_cache
+    => cap [env] artisan:clear_all
+```
 
 ### Monitoring
 * - [ ] ubuntu grafana (grafana).
