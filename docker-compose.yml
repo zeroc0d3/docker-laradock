@@ -78,7 +78,7 @@ services:
       - MARIADB_VERSION=${MARIADB_VERSION}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
       - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                 # grant user hostmask (optional)
-      - MYSQL_DATABASE=${MYSQL_DATABASE}                   # create database (optional)
+      - MYSQL_DATABASE=${MARIADB_DATABASE}                 # create database (optional)
       - MYSQL_USER=${MYSQL_USER}                           # grant user name (optional)
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}                   # grant user password (optional)
     networks:
@@ -178,7 +178,7 @@ services:
       - MYSQL_VERSION=${PERCONA_VERSION}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}         # root password
       - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}                 # grant user hostmask (optional)
-      - MYSQL_DATABASE=${MYSQL_DATABASE}                   # create database (optional)
+      - MYSQL_DATABASE=${PERCONA_DATABASE}                 # create database (optional)
       - MYSQL_USER=${MYSQL_USER}                           # grant user name (optional)
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}                   # grant user password (optional)
     networks:
