@@ -23,7 +23,7 @@ FROM mysql:${MYSQL_VERSION}
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
 ENV MYSQL_ROOT_PASSWORD="password" \
-    MYSQL_ROOT_HOST="localhost" \
+    MYSQL_ROOT_HOST="mysql" \
     MYSQL_DATABASE="laradock_mysql" \
     MYSQL_USER="laradock" \
     MYSQL_PASSWORD="password"

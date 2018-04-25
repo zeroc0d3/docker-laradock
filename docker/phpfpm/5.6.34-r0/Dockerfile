@@ -67,7 +67,8 @@ COPY rootfs/ /
 
 WORKDIR /var/www
 ENTRYPOINT ["/init"]
-CMD []
 
 EXPOSE 9200 9000 9090 80
+CMD []
 VOLUME ["/var/www"]
+

@@ -1,6 +1,6 @@
-ARG PHP_VERSION=7.2.3
-ARG ALPINE_VERSION=3.7
-FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION}
+ARG PHP_VERSION=5.3.6
+ARG ALPINE_VERSION=3.4
+FROM php:${PHP_VERSION}-fpm-alpine
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
@@ -27,7 +27,6 @@ ENV PHP_VERSION=${PHP_VERSION} \
     ALPINE_VERSION=${ALPINE_VERSION} \
     XDEBUG_VERSION=2.6.0
 
-# Install xdebug
 COPY ./docker-php-pecl-install /usr/local/bin/
 RUN apk add --no-cache $PHPIZE_DEPS \
                        libmcrypt-dev \
@@ -39,28 +38,18 @@ RUN apk add --no-cache $PHPIZE_DEPS \
             		   curl-dev \
             		   openssl-dev \
             		   libcurl \
-    && pecl install xdebug-${XDEBUG_VERSION} \
-    && docker-php-ext-enable xdebug \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install iconv \
-    && docker-php-ext-install bz2  \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install mysqli \
-    # && docker-php-ext-configure mcrypt \
-    # && docker-php-ext-install mcrypt \
-    # && docker-php-ext-configure intl \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-install curl \
-    && docker-php-ext-install zip
+    && pecl install xdebug-${XDEBUG_VERSION}
+
+COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
+RUN docker-php-ext-enable sodium
 
 RUN mkdir -p /var/log/php-fpm \
+    && mkdir -p /var/www/html \
     && touch /var/log/php-fpm/fpm-error.log \
     && chmod 777 /var/log/php-fpm/fpm-error.log
 
-ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www
+ENTRYPOINT ["docker-php-entrypoint"]
 
 EXPOSE 9200 9000 9090 80
 CMD ["php-fpm"]

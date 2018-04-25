@@ -23,7 +23,7 @@ FROM percona:${PERCONA_VERSION}
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
 ENV MYSQL_ROOT_PASSWORD="password" \
-    MYSQL_ROOT_HOST="localhost" \
+    MYSQL_ROOT_HOST="percona" \
     MYSQL_DATABASE="laradock_percona" \
     MYSQL_USER="laradock" \
     MYSQL_PASSWORD="password"

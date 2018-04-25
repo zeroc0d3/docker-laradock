@@ -1,5 +1,5 @@
-ARG MYSQL_VERSION=8.0.11
-FROM mysql:${MYSQL_VERSION}
+ARG PORTAINER_VERSION=1.16.5
+FROM portainer/portainer:${PORTAINER_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
@@ -22,23 +22,7 @@ FROM mysql:${MYSQL_VERSION}
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV MYSQL_ROOT_PASSWORD="password" \
-    MYSQL_ROOT_HOST="mysql" \
-    MYSQL_DATABASE="laradock_mysql" \
-    MYSQL_USER="laradock" \
-    MYSQL_PASSWORD="password"
+VOLUME /data
 
-VOLUME /var/lib/mysql
-
-COPY ./docker-entrypoint.sh /usr/local/bin/
-COPY ./healthycheck.sh /healthycheck.sh
-RUN touch /healthycheck.cnf && chmod 777 /healthycheck.cnf
-RUN touch /mysql-init-complete && chmod 777 /mysql-init-complete
-RUN ln -sf usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-HEALTHCHECK CMD /healthycheck.sh
-
-EXPOSE 3306
-CMD ["mysqld"]
+EXPOSE 9000
+CMD []

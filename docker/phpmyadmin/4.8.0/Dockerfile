@@ -29,7 +29,7 @@ LABEL version=$PHPMYADMIN_VERSION
 
 ENV PMA_ARBITRARY="1"
 ENV PMA_DB_ENGINE="mariadb"
-ENV PMA_HOST=${PMA_DB_ENGINE} \
+ENV PMA_HOST="mariadb" \
     PMA_USER="laradock" \
     PMA_PASSWORD="password" \
     PMA_ROOT_PASSWORD="password"

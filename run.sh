@@ -13,13 +13,13 @@ ENV="0"                              # container environment (0 = development, 1
 SKIP_BUILD="0"                       # (0 = with build process, 1 = bypass build process)
 REMOVE_CACHE="0"                     # (0 = using cache, 1 = no-cache)
 RECREATE_CONTAINER="0"               # (0 = disable recreate container, 1 = force recreate container)
-DAEMON_MODE="0"                      # (0 = disable daemon mode, 1 = running daemon mode / background)
+DAEMON_MODE="1"                      # (0 = disable daemon mode, 1 = running daemon mode / background)
 
 USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
-CONTAINER_PRODUCTION="consul workspace nginx adminer aerospike mariadb mongodb mysql percona pgadmin phpfpm phpmyadmin postgresql redis spark terraform"
-CONTAINER_DEVELOPMENT="consul workspace nginx adminer aerospike mariadb mongodb mysql percona pgadmin phpfpm phpmyadmin postgresql redis spark terraform"
+CONTAINER_PRODUCTION="consul workspace nginx adminer aerospike mariadb mongodb mysql percona pgadmin phpfpm phpmyadmin portainer postgresql redis spark terraform"
+CONTAINER_DEVELOPMENT="consul workspace nginx adminer phpmyadmin mariadb mysql percona pgadmin portainer postgresql"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
