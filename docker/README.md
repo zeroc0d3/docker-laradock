@@ -105,6 +105,7 @@ Running Task Deployment Capistrano
 
 ### Monitoring
 * - [ ] ubuntu grafana (grafana).
+* - [ ] alpine portainer 1.16 (portainer).
 
 ### Webserver
 * - [X] alpine nginx (nginx).
