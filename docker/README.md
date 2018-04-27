@@ -34,8 +34,8 @@ Customize mapping port environments for docker-compose.yml
 +----------+-----------+----------------------------------+
 |   8114   |      80   |  pgadmin                         |
 +----------+-----------+----------------------------------+
-|   8115   |      80   |  phpfpm - workspace port         |
-|   8116   |    9090   |  phpfpm - xDebug port            |
+|   8115   |      80   |  phpfpm (only) - workspace       |
+|   8116   |    9090   |  phpfpm (only) - xdebug          |
 +----------+-----------+----------------------------------+
 |   8117   |      80   |  phpmyadmin                      |
 +----------+-----------+----------------------------------+
@@ -56,7 +56,7 @@ Customize mapping port environments for docker-compose.yml
 +----------+-----------+----------------------------------+
 |   8126   |      22   |  vim                             |
 +----------+-----------+----------------------------------+
-|   8901   |      80   |  workspace phpfom                |
+|   8901   |      80   |  workspace phpfpm                |
 |   8902   |    9090   |  Workspace xdebug                |
 +----------+-----------+----------------------------------+
  Required (must included)
