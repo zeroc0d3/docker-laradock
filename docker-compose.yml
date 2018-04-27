@@ -256,7 +256,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
       - ${CONFIG_PHPFPM_INI}:/usr/local/etc/php/php.ini                             # ini path
-      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini    # xdebug config
+      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/laradock-php-ext-xdebug.ini  # xdebug config
       - ${LOG_PHPFPM}:/var/log/phpfpm                                               # log phpfpm
       - ${VENDOR_COMPOSER}:/usr/local/bin/composer                                  # vendor composer
       - ${VENDOR_DEPLOYER}:/usr/local/bin/dep                                       # vendor deployer
