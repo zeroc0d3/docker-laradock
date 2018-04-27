@@ -1,0 +1,18 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# SOLR
+#================================================================================================
+  solr:
+    restart: always
+    build:
+      context: ./docker/solr/${SOLR_VERSION}
+    ports:
+      - "${SOLR_PORT}:8983"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_SOLR}:/opt/solr                             # volume for data
+    environment:
+      - SOLR_VERSION=${SOLR_VERSION}

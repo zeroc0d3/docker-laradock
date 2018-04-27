@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# ELASTICSEARCH
+#================================================================================================
+  elasticsearch:
+    restart: always
+    build:
+      context: ./docker/elasticsearch/${ELASTICSEARCH_VERSION}
+    ports:
+      - "${ELASTICSEARCH_PORT1}:9200"
+      - "${ELASTICSEARCH_PORT2}:9300"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_ELASTICSEARCH}:/usr/share/elasticsearch/data          # volume for data
+    environment:
+      - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION}
