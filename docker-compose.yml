@@ -1,7 +1,63 @@
 version: '3.2'
 
-services:
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  backend:
+    driver: ${NETWORKS_DRIVER}
+  frontend:
+    driver: ${NETWORKS_DRIVER}
 
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  adminer:
+    driver: ${VOLUMES_DRIVER}
+  aerospike:
+    driver: ${VOLUMES_DRIVER}
+  consul:
+    driver: ${VOLUMES_DRIVER}
+  elasticsearch:
+    driver: ${VOLUMES_DRIVER}
+  mariadb:
+    driver: ${VOLUMES_DRIVER}
+  memcached:
+    driver: ${VOLUMES_DRIVER}
+  mongodb:
+    driver: ${VOLUMES_DRIVER}
+  mysql:
+    driver: ${VOLUMES_DRIVER}
+  nginx:
+    driver: ${VOLUMES_DRIVER}
+  percona:
+    driver: ${VOLUMES_DRIVER}
+  pgadmin:
+    driver: ${VOLUMES_DRIVER}
+  phpfpm:
+    driver: ${VOLUMES_DRIVER}
+  phpmyadmin:
+    driver: ${VOLUMES_DRIVER}
+  portainer:
+    driver: ${VOLUMES_DRIVER}
+  postgresql:
+    driver: ${VOLUMES_DRIVER}
+  redis:
+    driver: ${VOLUMES_DRIVER}
+  solr:
+    driver: ${VOLUMES_DRIVER}
+  spark-master:
+    driver: ${VOLUMES_DRIVER}
+  spark-worker:
+    driver: ${VOLUMES_DRIVER}
+  terraform:
+    driver: ${VOLUMES_DRIVER}
+  workspace:
+    driver: ${VOLUMES_DRIVER}
+
+
+services:
 #================================================================================================
 # CORE-CONSUL
 #================================================================================================
@@ -11,7 +67,7 @@ services:
     #   context: ./docker/core-consul
     image: dockerframework/core-consul
     ports:
-      - "8500:8500"
+      - "9500:8500"
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -159,7 +215,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_MYSQL}:/etc/my.cnf                                  # my.cnf mysql
-      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/laradock.cnf        # laradock.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/domikado.cnf        # domikado.cnf mysql
       - ${DATA_MYSQL}:/var/lib/mysql                                 # volume for data
       - ${LOG_MYSQL}:/var/log/mysql                                  # log mysql
     environment:
@@ -207,7 +263,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_MYSQL}:/etc/my.cnf                                  # my.cnf mysql
-      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/laradock.cnf        # laradock.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/domikado.cnf        # domikado.cnf mysql
       - ${DATA_PERCONA}:/var/lib/mysql                               # volume for data
       - ${LOG_PERCONA}:/var/log/mysql                                # log percona
     environment:
@@ -256,7 +312,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
       - ${CONFIG_PHPFPM_INI}:/usr/local/etc/php/php.ini                             # ini path
-      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/laradock-php-ext-xdebug.ini  # xdebug config
+      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini    # xdebug config
       - ${LOG_PHPFPM}:/var/log/phpfpm                                               # log phpfpm
       - ${VENDOR_COMPOSER}:/usr/local/bin/composer                                  # vendor composer
       - ${VENDOR_DEPLOYER}:/usr/local/bin/dep                                       # vendor deployer
@@ -484,59 +540,3 @@ services:
       - DEBUG=1
     networks:
       - backend
-
-#================================================================================================
-# NETWORK SETUP
-#================================================================================================
-networks:
-  backend:
-    driver: "bridge"
-  frontend:
-    driver: "bridge"
-
-#================================================================================================
-# VOLUME SETUP
-#================================================================================================
-volumes:
-  consul:
-    driver: "local"
-  adminer:
-    driver: "local"
-  aerospike:
-    driver: "local"
-  elasticsearch:
-    driver: "local"
-  mariadb:
-    driver: "local"
-  memcached:
-    driver: "local"
-  mongodb:
-    driver: "local"
-  mysql:
-    driver: "local"
-  nginx:
-    driver: "local"
-  percona:
-    driver: "local"
-  pgadmin:
-    driver: "local"
-  phpfpm:
-    driver: "local"
-  phpmyadmin:
-    driver: "local"
-  portainer:
-    driver: "local"
-  postgresql:
-    driver: "local"
-  redis:
-    driver: "local"
-  solr:
-    driver: "local"
-  spark-master:
-    driver: "local"
-  spark-worker:
-    driver: "local"
-  terraform:
-    driver: "local"
-  workspace:
-    driver: "local"
