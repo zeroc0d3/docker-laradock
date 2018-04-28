@@ -67,7 +67,7 @@ services:
     #   context: ./docker/core-consul
     image: dockerframework/core-consul
     ports:
-      - "9500:8500"
+      - "8500:8500"
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
