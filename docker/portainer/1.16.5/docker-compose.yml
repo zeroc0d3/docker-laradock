@@ -10,10 +10,10 @@ services:
     build:
       context: .
     ports:
-      - "${PORTAINER_PORT}:9000"
+      - "8118:9000"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${DATA_PORTAINER}:/data                                      # volume for data
+      - ./data/portainer:/data                                      # volume for data
     environment:
-      - PORTAINER_VERSION=${PORTAINER_VERSION}
+      - PORTAINER_VERSION=1.16.5

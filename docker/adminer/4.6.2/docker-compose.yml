@@ -3,17 +3,17 @@ version: '3.2'
 services:
 
 #================================================================================================
-# PORTAINER
+# ADMINER
 #================================================================================================
-  portainer:
+  adminer:
     restart: always
     build:
       context: .
     ports:
-      - "${PORTAINER_PORT}:9000"
+      - "8100:8080"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${DATA_PORTAINER}:/data                                      # volume for data
+      - ./session/adminer:/sessions                       # volume for sessions
     environment:
-      - PORTAINER_VERSION=${PORTAINER_VERSION}
+      - ADMINER_VERSION=4.6.2
+      - INSTALL_MSSQL=false
