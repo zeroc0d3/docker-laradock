@@ -5,10 +5,15 @@ services:
 #================================================================================================
 # CORE-BASE
 #================================================================================================
-  core-base:
+  base:
+    image: dockerframework/core-base
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+      - LANGUAGE=en_US.UTF-8
+      - TERM=xterm
       #- CONTAINER_HOST=                          # container host (defaut: hostname of the container)
       #- CONTAINER_RESOLVER=route                 # IP resolver method for container (disable/route/interface, default: route)
       #- CONTAINER_RESOLVER_INTERFACENAME=eth0    # network interface name for IP resolver (default: eth0)

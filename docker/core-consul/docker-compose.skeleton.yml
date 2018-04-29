@@ -5,8 +5,8 @@ services:
 #================================================================================================
 # CORE-CONSUL
 #================================================================================================
-  core-consul:
-    image: bhuisgen/alpine-consul
+  consul:
+    image: dockerframework/core-consul
     ports:
       - "8300:8300"       # server RPC
       - "8301:8301"       # serf LAN

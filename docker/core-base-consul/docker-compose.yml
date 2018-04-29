@@ -1,0 +1,20 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# CORE-BASE-CONSUL
+#================================================================================================
+  base-consul:
+    image: dockerframework/core-base-consul
+    ports:
+      - "1234:1234"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONSULTEMPLATE_VERSION=0.19.4
+      - CONSUL_AGENT=172.16.0.1                                     # agent hostname
+      - CONSUL_PORT=8500                                            # agent port
+      - CONSUL_TLS=0                                                # enable TLS
+      - CONSUL_SERVICENAME=foo                                      # service name to register
+      - CONSUL_SERVICEPORT=1234                                     # service port
