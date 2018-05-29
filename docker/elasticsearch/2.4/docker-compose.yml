@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# ELASTICSEARCH
+#================================================================================================
+  elasticsearch:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "8106:9200"
+      - "8107:9300"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/elasticsearch:/usr/share/elasticsearch/data          # volume for data
+    environment:
+      - ELASTICSEARCH_VERSION=2.4

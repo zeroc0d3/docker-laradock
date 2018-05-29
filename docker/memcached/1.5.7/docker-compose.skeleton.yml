@@ -13,6 +13,6 @@ services:
       - "${MEMCACHED_PORT}:11211"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${CACHE_MEMCACHED}:/data                           # volume for data
+      - ${CACHE_MEMCACHED}:/tmp/data                       # volume for data
     environment:
       - MEMCACHED_VERSION=${MEMCACHED_VERSION}

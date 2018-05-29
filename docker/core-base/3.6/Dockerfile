@@ -31,9 +31,9 @@ ENV S6OVERLAY_VERSION=v1.20.0.0 \
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash bind-tools ca-certificates curl jq tar && \
+    apk add bash bind-tools ca-certificates curl jq tar zip && \
     curl -sSL https://github.com/just-containers/s6-overlay/releases/download/${S6OVERLAY_VERSION}/s6-overlay-amd64.tar.gz | tar xz -C / && \
-    apk del tar && \
+    # apk del curl jq tar zip && \
     rm -rf /var/cache/apk/*
 
 COPY rootfs /

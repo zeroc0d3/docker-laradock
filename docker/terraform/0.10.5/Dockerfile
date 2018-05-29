@@ -1,5 +1,4 @@
-ARG TERRAFORM_VERSION=0.10.5
-FROM bhuisgen/alpine-base:latest
+FROM dockerframework/core-base:latest
 
 # ================================================================================================
 #  Inspiration: Docker Alpine (https://github.com/bhuisgen/docker-alpine)
@@ -22,7 +21,7 @@ FROM bhuisgen/alpine-base:latest
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
+ENV TERRAFORM_VERSION=0.10.5
 
 RUN apk add --update zip && \
     curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o /tmp/terraform.zip && \

@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# NODEJS
+#================================================================================================
+  nodejs:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "${NODEJS_SSH_PORT}:22"
+      - "${NODEJS_APP_PORT}:3000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - NODEJS_VERSION=${NODEJS_VERSION}
+      - YARN_VERSION=${YARN_VERSION}

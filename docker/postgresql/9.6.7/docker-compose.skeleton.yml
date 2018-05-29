@@ -13,7 +13,7 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATABASE_POSTGRESQL}/postgres:/var/lib/postgresql          # volume for data
+      - ${DATABASE_POSTGRESQL}:/var/lib/postgresql                   # volume for data
     environment:
       - POSTGRES_VERSION=${POSTGRES_VERSION}
       - POSTGRES_ROOT_HOST=${POSTGRES_ROOT_HOST}                     # grant user hostmask (optional)

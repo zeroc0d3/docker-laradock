@@ -1,0 +1,21 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# AEROSPIKE
+#================================================================================================
+  aerospike:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "8101:3000"
+      - "8102:3001"
+      - "8103:3002"
+      - "8104:3003"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config/aerospike/aerospike.conf:/etc/aerospike/aerospike.conf  # volume for config
+    environment:
+      - AEROSPIKE_VERSION=3.16.0.6

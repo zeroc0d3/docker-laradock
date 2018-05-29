@@ -1,0 +1,16 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# TERRAFORM
+#================================================================================================
+  terraform:
+    restart: always
+    build:
+      context: .
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/terraform:/data                             # volume for data
+    environment:
+      - TERRAFORM_VERSION=0.10.5

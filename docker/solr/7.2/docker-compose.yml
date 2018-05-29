@@ -1,0 +1,18 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# SOLR
+#================================================================================================
+  solr:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "8122:8983"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./data/solr:/opt/solr                              # volume for data
+    environment:
+      - SOLR_VERSION=7.2

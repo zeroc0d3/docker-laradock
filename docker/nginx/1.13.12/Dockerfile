@@ -25,6 +25,9 @@ MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
+COPY ./config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./config/nginx/phpfpm/laradock.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
 STOPSIGNAL SIGTERM

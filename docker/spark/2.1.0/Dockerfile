@@ -1,10 +1,8 @@
-ARG SPARK_VERSION=2.1.0
-ARG HADOOP_VERSION=2.7
-FROM bhuisgen/alpine-base-consul:latest
+FROM openjdk:8-alpine
 
 # ================================================================================================
-#  Inspiration: Docker Alpine (https://github.com/bhuisgen/docker-alpine)
-#               Boris HUISGEN <bhuisgen@hbis.fr>
+#  Inspiration: Docker Spark (https://github.com/twang2218/docker-spark)
+#               Tao Wang <twang2218@gmail.com>
 # ================================================================================================
 #  Core Contributors:
 #   - Mahmoud Zalt @mahmoudz
@@ -23,21 +21,30 @@ FROM bhuisgen/alpine-base-consul:latest
 
 MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-ENV SPARK_VERSION=${SPARK_VERSION} \
-    HADOOP_VERSION=${HADOOP_VERSION} \
-    SPARK_HOME=/usr/local/spark
+ENV SPARK_VERSION=2.1.0 \
+    HADOOP_VERSION=2.7 \
+    SPARK_HOME="/usr/local/share/spark"
 
-RUN mkdir -p ${SPARK_HOME} && \
-    addgroup -S spark && \
-    adduser -S -D -g "" -G spark -s /bin/sh -h ${SPARK_HOME} spark && \
-    chown -R spark:spark ${SPARK_HOME}
+ENV SPARK_NO_DAEMONIZE=true
 
-RUN apk add --update openjdk8-jre tar && \
+RUN apk update && \
+    apk upgrade && \
+    apk add bash bind-tools ca-certificates curl jq tar wget
+
+RUN set -xe && \
+    mkdir -p ${SPARK_HOME} && \
     curl -sSL http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz | tar -xzo -C ${SPARK_HOME} --strip-components 1 && \
     apk del tar && \
     rm -rf /var/cache/apk/*
 
-COPY rootfs /
 
-ENTRYPOINT ["/init"]
-CMD []
+ENV PATH=$PATH:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
+
+WORKDIR ${SPARK_HOME}
+
+# SPARK_MASTER_PORT
+EXPOSE 7077
+# SPARK_MASTER_WEBUI_PORT
+EXPOSE 8080
+
+CMD ["spark-shell"]

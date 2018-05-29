@@ -21,6 +21,7 @@ FROM solr:${SOLR_VERSION}-alpine
 # ================================================================================================
 
 COPY scripts /opt/docker-solr/scripts
+USER root
 RUN chown -R $SOLR_USER:$SOLR_GROUP /opt/docker-solr
 
 EXPOSE 8983

@@ -1,0 +1,83 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# CORE-CONSUL
+#================================================================================================
+  consul:
+    image: dockerframework/core-consul
+    ports:
+      - "8500:8500"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONSUL_OPTIONS=-server -bootstrap-expect 1 -client 0.0.0.0 -ui    # minimal server options
+
+#================================================================================================
+# SPARK
+#================================================================================================
+  spark-master:
+    restart: always
+    build:
+      context: .
+    expose:
+      - 7001
+      - 7002
+      - 7003
+      - 7004
+      - 7005
+      - 7006
+      - 7077
+      - 6066
+    ports:
+      - "4040:4040"
+      - "6066:6066"
+      - "7077:7077"
+      - "8123:8080"
+    depends_on:
+      - consul
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SPARK_HOME=./data/spark-master
+      - SPARK_VERSION=2.1.0
+      - HADOOP_VERSION=2.7
+      - CONSUL_AGENT=consul
+      - CONSUL_SERVICENAME=spark-master
+      - CONSUL_SERVICETAGS=dev
+      - CONSUL_SERVICEPORT=8123
+      - CONSUL_CHECKTYPE=tcp
+      - SPARK_MASTER_HOST=spark-master
+    command: start-master.sh
+
+  spark-worker:
+    restart: always
+    build:
+      context: .
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - "8124:8081"
+    depends_on:
+      - consul
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SPARK_HOME=./data/spark-master
+      - SPARK_VERSION=2.1.0
+      - HADOOP_VERSION=2.7
+      - CONSUL_AGENT=consul
+      - CONSUL_SERVICENAME=spark-worker1
+      - CONSUL_SERVICETAGS=dev
+      - CONSUL_SERVICEPORT=8124
+      - CONSUL_CHECKTYPE=tcp
+      - SPARK_EXECUTOR_MEMORY=4G
+      - SPARK_DRIVER_MEMORY=2G
+      - SPARK_MASTERURL=spark://spark-master:7077
+    command: start-slave.sh --host spark-worker spark://spark-master:7077

@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# NODEJS
+#================================================================================================
+  nodejs:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "9100:22"
+      - "9101:3000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - NODEJS_VERSION=9.11.1
+      - YARN_VERSION=1.6.0
