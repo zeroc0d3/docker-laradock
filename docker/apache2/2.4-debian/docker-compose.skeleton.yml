@@ -3,24 +3,31 @@ version: '3.2'
 services:
 
 #================================================================================================
-# NGINX
+# APACHE2
 #================================================================================================
-  nginx:
+  apache2:
     restart: always
     build:
       context: .
+      args:
+        - PHP_UPSTREAM_CONTAINER=${APACHE_PHP_UPSTREAM_CONTAINER}
+        - PHP_UPSTREAM_PORT=${APACHE_PHP_UPSTREAM_PORT}
+        - PHP_UPSTREAM_TIMEOUT=${APACHE_PHP_UPSTREAM_TIMEOUT}
+        - DOCUMENT_ROOT=${CONFIG_APACHE}
     links:
       - workspace-phpfpm
     ports:
-      - "${NGINX_HTTP_PORT}:80"
+      - "${APACHE_HTTP_PORT}:80"
+      - "${APACHE_HTTPS_PORT}:443"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      #- ${CONFIG_NGINX}:/etc/nginx/nginx.conf                  # nginx config path
-      - ${CONFIG_NGINX_PHPFPM}:/etc/nginx/conf.d/default.conf   # phpfpm config path
-      - ${LOG_NGINX}:/var/log/nginx                             # log nginx
+      - ${LOG_APACHE}:/var/log/apache2                          # volume for config
       - ${WORKSPACE}:/var/www/html                              # volume for data
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ${APACHE_HOST_LOG_PATH}:/var/log/apache2
+      - ${APACHE_SITES_PATH}:/etc/apache2/sites-available
     environment:
-      - NGINX_VERSION=${NGINX_VERSION}
+      - APACHE_VERSION=${APACHE_VERSION}
 
 #================================================================================================
 # WORKSPACE PHP-FPM

@@ -1,11 +1,23 @@
-## Docker Container List
+#!/usr/bin/env sh
+# -----------------------------------------------------------------------------
+#  DOCKER BUILDER SCRIPT
+# -----------------------------------------------------------------------------
+#  Author     : Dwi Fahni Denni (@zeroc0d3)
+#  Repository : https://github.com/zeroc0d3/docker-framework
+#  License    : MIT
+# -----------------------------------------------------------------------------
 
-Laradock docker container list
+TITLE="LARADOCK BUILDER SCRIPT"      # script name
+VER="1.4.2"                          # script version
+ENV="0"                              # container environment (0 = development, 1 = production)
+SKIP_BUILD="0"                       # (0 = with build process, 1 = bypass build process)
+REMOVE_CACHE="0"                     # (0 = using cache, 1 = no-cache)
+RECREATE_CONTAINER="0"               # (0 = disable recreate container, 1 = force recreate container)
+DAEMON_MODE="1"                      # (0 = disable daemon mode, 1 = running daemon mode / background)
 
-### Port Configuration
-Customize mapping port environments for docker-compose.yml
+USERNAME=`echo $USER`
+PATH_HOME=`echo $HOME`
 
-```bash
 ##  LIST CONTAINER NAME & PORTS
 ## +==========+============+==================================+
 ## |   INITIALIZE PORTS    |                                  |
@@ -131,83 +143,138 @@ Customize mapping port environments for docker-compose.yml
 ##  - Container "consul"
 ##  - Container "grafana"
 ##  - Container "portainer"
-```
 
-### Core Container
-* - [X] alpine core-base (core-base).
-* - [X] alpine core-base-consul (core-base-consul).
-* - [X] alpine core-consul (core-consul).
-* - [X] alpine workspace phpfpm-5.6 (workspace).
-* - [ ] debian workspace phpfpm-5.6 (workspace).
-* - [X] alpine workspace phpfpm-7.2 (workspace).
-* - [ ] debian workspace phpfpm-7.2 (workspace).
+CONTAINER_PRODUCTION="consul workspace grafana nginx adminer aerospike elasticsearch mariadb memcached mongodb mysql percona pgadmin phpfpm phpmyadmin portainer postgresql redis solr spark terraform"
+CONTAINER_DEVELOPMENT="consul grafana portainer"
 
-### API Tools Container
-* - [ ] debian swagger-ui 3.0 (swagger-ui).
-* - [ ] debian swagger-data (swagger-data).
+export DOCKER_CLIENT_TIMEOUT=300
+export COMPOSE_HTTP_TIMEOUT=300
 
-### Cache Container
-* - [X] alpine memcached 1.5 (memcached).
-* - [X] alpine redis 3.2 (redis).
-* - [X] alpine redis 4.0 (redis).
+get_time() {
+  DATE=`date '+%Y-%m-%d %H:%M:%S'`
+}
 
-### Database Container
-* - [ ] alpine cratedb 2.3 (cratedb).
-* - [X] debian mariadb 10.2 / 10.3 (mariadb).
-* - [X] debian mongodb 3.4 / 3.6 / 3.7 (mongodb).
-* - [X] debian mysql 5.7 (mysql).
-* - [X] debian mysql 8.0 (mysql).
-* - [X] debian percona 5.6 / 5.7 (percona).
-* - [X] debian postgresql 9.6 (postgres).
-* - [X] debian postgresql 10 (postgres).
-* - [ ] debian rethinkdb 2.3 (rethinkdb).
+logo() {
+  clear
+  echo "\033[22;32m=======================================================================================\033[0m"
+  echo "\033[22;31m '##::::::::::'###::::'########:::::'###::::'########:::'#######:::'######::'##:::'##: \033[0m"
+  echo "\033[22;31m  ##:::::::::'## ##::: ##.... ##:::'## ##::: ##.... ##:'##.... ##:'##... ##: ##::'##:: \033[0m"
+  echo "\033[22;31m  ##::::::::'##:. ##:: ##:::: ##::'##:. ##:: ##:::: ##: ##:::: ##: ##:::..:: ##:'##::: \033[0m"
+  echo "\033[22;31m  ##:::::::'##:::. ##: ########::'##:::. ##: ##:::: ##: ##:::: ##: ##::::::: #####:::: \033[0m"
+  echo "\033[22;31m  ##::::::: #########: ##.. ##::: #########: ##:::: ##: ##:::: ##: ##::::::: ##. ##::: \033[0m"
+  echo "\033[22;31m  ##::::::: ##.... ##: ##::. ##:: ##.... ##: ##:::: ##: ##:::: ##: ##::: ##: ##:. ##:: \033[0m"
+  echo "\033[22;31m  ########: ##:::: ##: ##:::. ##: ##:::: ##: ########::. #######::. ######:: ##::. ##: \033[0m"
+  echo "\033[22;31m ........::..:::::..::..:::::..::..:::::..::........::::.......::::......:::..::::..:: \033[0m"
+  echo "\033[22;32m---------------------------------------------------------------------------------------\033[0m"
+  echo "\033[22;32m# $TITLE :: ver-$VER                                                                   \033[0m"
+}
 
-### Database Tools Container
-* - [X] alpine adminer 4.6 (adminer).
-* - [X] alpine phpmyadmin 4.8 (phpmyadmin).
-* - [X] ubuntu pgadmin4 release 3.0 (pgadmin).
+header() {
+  logo
+  echo "\033[22;32m=======================================================================================\033[0m"
+  get_time
+  echo "\033[22;31m# BEGIN PROCESS..... (Please Wait)  \033[0m"
+  echo "\033[22;31m# Start at: $DATE  \033[0m\n"
+}
 
-### Deployment Tools
-* - [X] ruby [capistrano][]
-* - [X] php [deployer][]
-```
-Running Task Deployment Capistrano
-  type: [env] = production / staging
-    => cap [env] deploy
-    => cap [env] nginx:manual_restart
-    => cap [env] phpfpm:manual_restart
-    => cap [env] composer:install
-    => cap [env] composer:update
-    => cap [env] composer:dumpautoload
-    => cap [env] artisan:clear_view
-    => cap [env] artisan:clear_cache
-    => cap [env] artisan:clear_all
-```
+footer() {
+  echo "\033[22;32m=======================================================================================\033[0m"
+  get_time
+  echo "\033[22;31m# Finish at: $DATE  \033[0m"
+  echo "\033[22;31m# END PROCESS.....  \033[0m\n"
+}
 
-### Mail Container
-* - [ ] alpine maildev 1.0 (maildev).
-* - [ ] alpine mailhog 1.0 (mailhog).
+build_env() {
+  if [ "$ENV" = "0" ]
+  then
+    BUILD_ENV="$CONTAINER_DEVELOPMENT"
+  else
+    BUILD_ENV="$CONTAINER_PRODUCTION"
+  fi
+}
 
-### Monitoring Container
-* - [X] debian grafana 5.1 (grafana).
-* - [X] alpine portainer 1.16 (portainer).
+cache() {
+  if [ "$REMOVE_CACHE" = "0" ]
+  then
+    CACHE=""
+  else
+    CACHE="--no-cache "
+  fi
+}
 
-### Webserver Container
-* - [X] alpine nginx (nginx).
-* - [X] alpine apache2 2.4 (apache2).
-* - [X] debian apache2 2.4 (apache2).
+recreate() {
+  if [ "$RECREATE_CONTAINER" = "0" ]
+  then
+    RECREATE=""
+  else
+    RECREATE="--force-recreate "
+  fi
+}
 
-### Others
-* - [X] ubuntu aerospike 3.16 (aerospike).
-* - [X] ubuntu aerospike 4.0 (aerospike).
-* - [X] alpine elasticsearch 2.4 (elasticsearch).
-* - [X] alpine elasticsearch 5.6 (elasticsearch).
-* - [X] alpine solr 7.2 (solr).
-* - [X] alpine solr 7.3 (solr).
-* - [X] alpine spark-master 2.1 (spark-master).
-* - [X] alpine spark-worker 2.1 (spark-worker).
-* - [X] alpine terraform 0.10 (terraform).
-* - [ ] alpine vim 2.8 (vim).
+daemon_mode() {
+  if [ "$DAEMON_MODE" = "0" ]
+  then
+    DAEMON=""
+  else
+    DAEMON="-d "
+  fi
+}
 
-[capistrano]:https://github.com/capistrano/capistrano
-[deployer]:https://github.com/deployphp/deployer
+docker_build() {
+  if [ "$SKIP_BUILD" = "0" ]
+  then
+    echo "--------------------------------------------------------------------------"
+    get_time
+    echo "\033[22;34m[ $DATE ] ##### Docker Compose: \033[0m                        "
+    echo "\033[22;32m[ $DATE ]       docker-compose build $CACHE$BUILD_ENV \033[0m\n"
+
+    ## MULTI CONTAINER
+    ## ------------------------------
+    for CONTAINER in $BUILD_ENV
+    do
+      get_time
+      echo "--------------------------------------------------------------------------"
+      echo "\033[22;32m[ $DATE ]       docker-compose build $CONTAINER \033[0m        "
+      echo "--------------------------------------------------------------------------"
+      docker-compose build $CONTAINER
+      echo ""
+    done
+
+    ## SINGLE CONTAINER (test)
+    ## ------------------------------
+    ## get_time
+    ## echo "--------------------------------------------------------------------------"
+    ## echo "\033[22;32m[ $DATE ]       docker-compose build $BUILD_ENV \033[0m        "
+    ## echo "--------------------------------------------------------------------------"
+    ## docker-compose build $BUILD_ENV
+    ## echo ""
+  fi
+}
+
+docker_up() {
+  daemon_mode
+  echo ""
+  echo "--------------------------------------------------------------------------"
+  get_time
+  echo "\033[22;34m[ $DATE ] ##### Docker Compose Up: \033[0m                     "
+  echo "\033[22;32m[ $DATE ]       docker-compose up $RECREATE$BUILD_ENV \033[0m\n  "
+  get_time
+  echo "--------------------------------------------------------------------------"
+  echo "\033[22;32m[ $DATE ]       docker-compose up $RECREATE$BUILD_ENV \033[0m "
+  echo "--------------------------------------------------------------------------"
+  docker-compose up $DAEMON $RECREATE$BUILD_ENV
+  echo ""
+}
+
+main() {
+  header
+  cache
+  recreate
+  build_env
+  docker_build
+  docker_up
+  footer
+}
+
+### START HERE ###
+main $@

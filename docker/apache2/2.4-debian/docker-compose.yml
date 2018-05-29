@@ -3,25 +3,30 @@ version: '3.2'
 services:
 
 #================================================================================================
-# NGINX
+# APACHE2
 #================================================================================================
-  nginx:
+  apache2:
     restart: always
     build:
       context: .
+      args:
+        - PHP_UPSTREAM_CONTAINER=php-fpm
+        - PHP_UPSTREAM_PORT=9000
+        - PHP_UPSTREAM_TIMEOUT=60
+        - DOCUMENT_ROOT=/var/www/html
     links:
       - workspace-phpfpm
     ports:
-      - "8140:80"
+      - "8105:80"
+      - "8106:443"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./config/nginx/phpfpm/laradock.conf:/etc/nginx/conf.d/default.conf          # phpfpm config path
-      - ./log/nginx:/var/log/nginx                                                  # log nginx
-      - ./data/laradock:/var/www/html                                               # volume for data
+      - ./log/apache2:/var/log/apache2                          # volume for config
+      - ./data/laradock:/var/www/html                           # volume for data
     environment:
-      - NGINX_VERSION=1.13.12
+      - APACHE_VERSION=2.4
 
-#================================================================================================
+##================================================================================================
 # WORKSPACE PHP-FPM
 #================================================================================================
   workspace-phpfpm:

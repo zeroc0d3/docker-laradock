@@ -20,7 +20,7 @@ FROM elasticsearch:${ELASTICSEARCH_VERSION}-alpine
 #   - Huadong Zuo @zuohuadong
 # ================================================================================================
 
-COPY config ./config
+COPY ./config/elasticsearch ./config
 
 VOLUME /usr/share/elasticsearch/data
 

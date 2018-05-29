@@ -1,5 +1,5 @@
-ARG ELASTICSEARCH_VERSION=5.6
-FROM elasticsearch:${ELASTICSEARCH_VERSION}-alpine
+ARG APACHE_VERSION=2.4
+FROM httpd:${APACHE_VERSION}
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)
@@ -20,12 +20,9 @@ FROM elasticsearch:${ELASTICSEARCH_VERSION}-alpine
 #   - Huadong Zuo @zuohuadong
 # ================================================================================================
 
-COPY ./config/elasticsearch ./config
+MAINTAINER "Laradock Team <mahmoud@zalt.me>"
 
-VOLUME /usr/share/elasticsearch/data
+COPY ./httpd-foreground /usr/local/bin/
 
-COPY docker-entrypoint.sh /
-
-EXPOSE 9200 9300
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["elasticsearch"]
+EXPOSE 80 443
+CMD ["httpd-foreground"]
