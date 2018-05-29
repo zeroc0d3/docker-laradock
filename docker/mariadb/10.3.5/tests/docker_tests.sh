@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/mariadb"
-DOCKER_TAG="latest"
+DOCKER_TAG="10.3"
 
 #### Halt script on error
 set -e

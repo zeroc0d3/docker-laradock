@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/grafana"
-DOCKER_TAG="latest"
+DOCKER_TAG="5.1.3"
 
 #### Halt script on error
 set -e

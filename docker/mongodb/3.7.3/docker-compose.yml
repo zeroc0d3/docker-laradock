@@ -19,7 +19,7 @@ services:
       - ./data/mongodb:/var/lib/mongodb
       - ./log/mongodb:/var/log/mongodb/mongod.log          # log mongodb
     environment:
-      - MONGO_VERSION=latest
+      - MONGO_VERSION=3.7.3
       - MONGO_INITDB_ROOT_PASSWORD=password
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_HOST=mongodb

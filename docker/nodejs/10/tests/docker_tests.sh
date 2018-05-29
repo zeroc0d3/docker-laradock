@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/nodejs"
-DOCKER_TAG="latest"
+DOCKER_TAG="10"
 
 #### Halt script on error
 set -e

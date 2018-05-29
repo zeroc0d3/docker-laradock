@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/mysql"
-DOCKER_TAG="latest"
+DOCKER_TAG="8.0"
 
 #### Halt script on error
 set -e

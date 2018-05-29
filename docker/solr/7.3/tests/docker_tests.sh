@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/solr"
-DOCKER_TAG="latest"
+DOCKER_TAG="7.3"
 
 #### Halt script on error
 set -e

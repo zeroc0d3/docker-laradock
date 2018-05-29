@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=dockerframework/adminer
+    - REPO=dockerframework/adminer:4.6
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64

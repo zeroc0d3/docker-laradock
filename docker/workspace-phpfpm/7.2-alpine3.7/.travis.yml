@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=dockerframework/workspace-phpfpm
+    - REPO=dockerframework/workspace-phpfpm:7.2-alpine3.7
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/nginx"
-DOCKER_TAG="latest"
+DOCKER_TAG="1.13"
 
 #### Halt script on error
 set -e

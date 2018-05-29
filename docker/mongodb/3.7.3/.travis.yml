@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=dockerframework/mongodb:latest
+    - REPO=dockerframework/mongodb:3.7
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64

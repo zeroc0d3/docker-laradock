@@ -1,4 +1,4 @@
-ARG MONGO_VERSION=latest
+ARG MONGO_VERSION=3.7.3
 FROM mongo:${MONGO_VERSION}
 
 # ================================================================================================

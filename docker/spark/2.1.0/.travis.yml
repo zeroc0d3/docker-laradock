@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=dockerframework/spark
+    - REPO=dockerframework/spark:2.1
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64

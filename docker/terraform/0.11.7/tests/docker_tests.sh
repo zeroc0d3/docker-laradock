@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/terraform"
-DOCKER_TAG="latest"
+DOCKER_TAG="0.11"
 
 #### Halt script on error
 set -e

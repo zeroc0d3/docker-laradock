@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/redis"
-DOCKER_TAG="latest"
+DOCKER_TAG="4.0"
 
 #### Halt script on error
 set -e

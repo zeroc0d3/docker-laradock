@@ -10,7 +10,7 @@ services:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-    - REPO=dockerframework/redis
+    - REPO=dockerframework/redis:4.0
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64

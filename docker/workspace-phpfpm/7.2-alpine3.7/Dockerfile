@@ -1,4 +1,4 @@
-FROM dockerframework/phpfpm:latest
+FROM dockerframework/phpfpm:7.2
 
 # ================================================================================================
 #  Inspiration: Docker Framework (https://github.com/zeroc0d3/docker-framework)

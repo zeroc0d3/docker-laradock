@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DOCKER_IMAGE="dockerframework/spark"
-DOCKER_TAG="latest"
+DOCKER_TAG="2.1"
 
 #### Halt script on error
 set -e

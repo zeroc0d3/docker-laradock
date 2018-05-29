@@ -25,5 +25,9 @@ services:
       - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
       - ${WORKSPACE}:/var/www/html                                                  # volume for data
     environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
+      - PHP_VERSION=${PHP_VERSION}
+      - XDEBUG_VERSION=${XDEBUG_VERSION}
+      - DEBUG=1
       - NODE_VERSION=${NODE_VERSION}
       - YARN_VERSION=${YARN_VERSION}
