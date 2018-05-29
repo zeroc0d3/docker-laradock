@@ -34,49 +34,52 @@ PATH_HOME=`echo $HOME`
 ## |   8106   |    9200   |  elasticsearch                   |
 ## |   8107   |    9300   |                                  |
 ## +----------+-----------+----------------------------------+
-## |   8108   |    3306   |  mariadb                         |
-## |   8109   |    3306   |  mysql                           |
-## |   8110   |    3306   |  percona                         |
+## |   8108   |    3000   |  grafana                         |
 ## +----------+-----------+----------------------------------+
-## |   8111   |   11211   |  memcached                       |
+## |   8109   |    3306   |  mariadb                         |
+## |   8110   |    3306   |  mysql                           |
+## |   8111   |    3306   |  percona                         |
 ## +----------+-----------+----------------------------------+
-## |   8112   |   27017   |  mongodb                         |
+## |   8112   |   11211   |  memcached                       |
 ## +----------+-----------+----------------------------------+
-## |   8113   |      80   |  nginx                           |
+## |   8113   |   27017   |  mongodb                         |
 ## +----------+-----------+----------------------------------+
-## |   8114   |      80   |  pgadmin                         |
+## |   8114   |      80   |  nginx                           |
 ## +----------+-----------+----------------------------------+
-## |   8115   |      80   |  phpfpm (only) - workspace       |
-## |   8116   |    9090   |  phpfpm (only) - xdebug          |
+## |   8115   |      80   |  pgadmin                         |
 ## +----------+-----------+----------------------------------+
-## |   8117   |      80   |  phpmyadmin                      |
+## |   8116   |      80   |  phpfpm (only) - workspace       |
+## |   8117   |    9090   |  phpfpm (only) - xdebug          |
 ## +----------+-----------+----------------------------------+
-## |   8118   |    9000   |  portainer                       |
+## |   8118   |      80   |  phpmyadmin                      |
 ## +----------+-----------+----------------------------------+
-## |   8119   |    5432   |  postgresql                      |
+## |   8119   |    9000   |  portainer                       |
 ## +----------+-----------+----------------------------------+
-## |   8120   |    6379   |  redis                           |
+## |   8120   |    5432   |  postgresql                      |
 ## +----------+-----------+----------------------------------+
-## |   8121   |      22   |  ruby                            |
+## |   8121   |    6379   |  redis                           |
 ## +----------+-----------+----------------------------------+
-## |   8122   |    8983   |  solr                            |
+## |   8122   |      22   |  ruby                            |
 ## +----------+-----------+----------------------------------+
-## |   8123   |    8080   |  spark - master                  |
-## |   8124   |    8881   |  spark - worker                  |
+## |   8123   |    8983   |  solr                            |
 ## +----------+-----------+----------------------------------+
-## |   8125   |      22   |  terraform                       |
+## |   8124   |    8080   |  spark - master                  |
+## |   8125   |    8881   |  spark - worker                  |
 ## +----------+-----------+----------------------------------+
-## |   8126   |      22   |  vim                             |
+## |   8126   |      22   |  terraform                       |
+## +----------+-----------+----------------------------------+
+## |   8127   |      22   |  vim                             |
 ## +----------+-----------+----------------------------------+
 ## |   8901   |      80   |  workspace phpfpm                |
 ## |   8902   |    9090   |  Workspace xdebug                |
 ## +----------+-----------+----------------------------------+
 ##  Required (must included)
 ##  - Container "consul"
+##  - Container "grafana"
 ##  - Container "portainer"
 
-CONTAINER_PRODUCTION="consul workspace nginx adminer aerospike elasticsearch mariadb memcached mongodb mysql percona pgadmin phpfpm phpmyadmin portainer postgresql redis solr spark terraform"
-CONTAINER_DEVELOPMENT="consul workspace nginx adminer phpmyadmin mariadb mysql percona pgadmin portainer postgresql"
+CONTAINER_PRODUCTION="consul workspace grafana nginx adminer aerospike elasticsearch mariadb memcached mongodb mysql percona pgadmin phpfpm phpmyadmin portainer postgresql redis solr spark terraform"
+CONTAINER_DEVELOPMENT="consul workspace grafana nginx adminer phpmyadmin mariadb mysql percona pgadmin portainer postgresql"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
@@ -158,6 +161,9 @@ docker_build() {
     get_time
     echo "\033[22;34m[ $DATE ] ##### Docker Compose: \033[0m                        "
     echo "\033[22;32m[ $DATE ]       docker-compose build $CACHE$BUILD_ENV \033[0m\n"
+
+    ## MULTI CONTAINER
+    ## ------------------------------
     for CONTAINER in $BUILD_ENV
     do
       get_time
@@ -167,6 +173,15 @@ docker_build() {
       docker-compose build $CONTAINER
       echo ""
     done
+
+    ## SINGLE CONTAINER (test)
+    ## ------------------------------
+    ## get_time
+    ## echo "--------------------------------------------------------------------------"
+    ## echo "\033[22;32m[ $DATE ]       docker-compose build $BUILD_ENV \033[0m        "
+    ## echo "--------------------------------------------------------------------------"
+    ## docker-compose build $BUILD_ENV
+    ## echo ""
   fi
 }
 

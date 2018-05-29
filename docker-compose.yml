@@ -21,6 +21,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   elasticsearch:
     driver: ${VOLUMES_DRIVER}
+  grafana:
+    driver: ${VOLUMES_DRIVER}
   mariadb:
     driver: ${VOLUMES_DRIVER}
   memcached:
@@ -135,6 +137,30 @@ services:
     networks:
       - backend
       - frontend
+
+#================================================================================================
+# GRAFANA
+#================================================================================================
+  grafana:
+    restart: always
+    build:
+      context: ./docker/grafana/${GRAFANA_VERSION}
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_GRAFANA}:/var/lib/grafana                             # volume for data
+    environment:
+      - GRAFANA_VERSION=${GRAFANA_VERSION}
+      - GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+      - GF_INSTALL_PLUGINS=${GF_INSTALL_PLUGINS}
+      - GF_AWS_PROFILES=${GF_AWS_PROFILES}
+      - GF_AWS_default_ACCESS_KEY_ID=${GF_AWS_default_ACCESS_KEY_ID}
+      - GF_AWS_default_SECRET_ACCESS_KEY=${GF_AWS_default_SECRET_ACCESS_KEY}
+      - GF_AWS_default_REGION=${GF_AWS_default_REGION}
+    networks:
+      - backend
 
 #================================================================================================
 # MARIADB
