@@ -1,0 +1,29 @@
+version: '3.2'
+
+services:
+
+#================================================================================================
+# PHP-FPM
+#================================================================================================
+  phpfpm:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "${PHPFPM_PORT}:80"
+      - "${XDEBUG_PORT}:9090"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_PHPFPM}:/usr/local/etc/php-fpm.conf                                # config path
+      - ${CONFIG_PHPFPM_INI}:/usr/local/etc/php/php.ini                             # ini path
+      - ${CONFIG_PHP_XDEBUG}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini    # xdebug config
+      - ${LOG_PHPFPM}:/var/log/phpfpm                                               # log phpfpm
+      - ${VENDOR_COMPOSER}:/usr/local/bin/composer                                  # vendor composer
+      - ${VENDOR_DEPLOYER}:/usr/local/bin/dep                                       # vendor deployer
+      - ${VENDOR_PHP_CS_FIXER}:/usr/local/bin/php-cs-fixer                          # vendor php-cs-fixer
+      - ${WORKSPACE}:/var/www/html                                                  # volume for data
+    environment:
+      - ALPINE_VERSION=${ALPINE_VERSION}
+      - PHP_VERSION=${PHP_VERSION}
+      - XDEBUG_VERSION=${XDEBUG_VERSION}
+      - DEBUG=1
