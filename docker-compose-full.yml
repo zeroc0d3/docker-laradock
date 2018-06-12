@@ -5,58 +5,60 @@ version: '3.2'
 #================================================================================================
 networks:
   backend:
-    driver: ${NETWORKS_DRIVER}
+    driver: ${NETWORKS_DRIVER:-bridge}
   frontend:
-    driver: ${NETWORKS_DRIVER}
+    driver: ${NETWORKS_DRIVER:-bridge}
 
 #================================================================================================
 # VOLUME SETUP
 #================================================================================================
 volumes:
   adminer:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   aerospike:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   consul:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   elasticsearch:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   grafana:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   mariadb:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   memcached:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   mongodb:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   mysql:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   nginx:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   percona:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   pgadmin:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   phpfpm:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   phpmyadmin:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   portainer:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
+  prometheus:
+    driver: ${VOLUMES_DRIVER:-local}
   postgresql:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   redis:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   solr:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   spark-master:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   spark-worker:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   terraform:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
   workspace:
-    driver: ${VOLUMES_DRIVER}
+    driver: ${VOLUMES_DRIVER:-local}
 
 
 services:
@@ -64,10 +66,11 @@ services:
 # CORE-BASE
 #================================================================================================
   base:
-    restart: always
+    restart: unless-stopped
     # build:
     #   context: ./docker/core-base/${ALPINE_VERSION}
     image: dockerframework/core-base
+    container_name: dockerframework_base
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -83,10 +86,11 @@ services:
 # CORE-BASE-CONSUL
 #================================================================================================
   base-consul:
-    restart: always
+    restart: unless-stopped
     # build:
     #   context: ./docker/core-base-consul
     image: dockerframework/core-base-consul
+    container_name: dockerframework_base_consul
     ports:
       - "9999:9999"
     volumes:
@@ -103,10 +107,11 @@ services:
 # CORE-CONSUL
 #================================================================================================
   consul:
-    restart: always
+    restart: unless-stopped
     # build:
     #   context: ./docker/core-consul
     image: dockerframework/core-consul
+    container_name: dockerframework_consul
     ports:
       - "8500:8500"
     volumes:
@@ -120,9 +125,10 @@ services:
 # ADMINER
 #================================================================================================
   adminer:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/adminer/${ADMINER_VERSION}
+    container_name: dockerframework_adminer
     ports:
       - "${ADMINER_PORT}:8080"
     volumes:
@@ -139,9 +145,10 @@ services:
 # AEROSPIKE
 #================================================================================================
   aerospike:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/aerospike/${AEROSPIKE_VERSION}
+    container_name: dockerframework_aerospike
     links:
       - workspace
     ports:
@@ -159,12 +166,68 @@ services:
       - backend
 
 #================================================================================================
+# ALERTMANAGER
+#================================================================================================
+  alertmanager:
+    restart: unless-stopped
+    image: prom/alertmanager:v0.14.0
+    container_name: dockerframework_alertmanager
+    volumes:
+      - ./data/alertmanager/:/etc/alertmanager/
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - "${ALERTMANAGER_PORT:-9300}:9093"
+    networks:
+      - backend
+
+#================================================================================================
+# CADDY
+#================================================================================================
+  caddy:
+    restart: unless-stopped
+    image: stefanprodan/caddy
+    container_name: dockerframework_caddy
+    ports:
+      - "${CADDY_PORT:-9301}:3000"
+      - "${CADDY_PORT:-9302}:9090"
+      - "${CADDY_PORT:-9303}:9091"
+      - "${CADDY_PORT:-9304}:9093"
+    volumes:
+      - ./data/caddy/:/etc/caddy/
+    environment:
+      - ADMIN_USER=laradock
+      - ADMIN_PASSWORD=password
+    networks:
+      - backend
+
+#================================================================================================
+# CADVISOR
+#================================================================================================
+  cadvisor:
+    restart: unless-stopped
+    image: google/cadvisor:v0.28.3
+    container_name: dockerframework_cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    ports:
+      - "${CADVISOR_PORT:-9305}:3000"
+    networks:
+      - backend
+
+#================================================================================================
 # ELASTICSEARCH
 #================================================================================================
   elasticsearch:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/elasticsearch/${ELASTICSEARCH_VERSION}
+    container_name: dockerframework_elasticsearch
     ports:
       - "${ELASTICSEARCH_PORT1}:9200"
       - "${ELASTICSEARCH_PORT2}:9300"
@@ -181,9 +244,10 @@ services:
 # GRAFANA
 #================================================================================================
   grafana:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/grafana/${GRAFANA_VERSION}
+    container_name: dockerframework_grafana
     ports:
       - "${GRAFANA_PORT}:3000"
     volumes:
@@ -205,9 +269,10 @@ services:
 # MARIADB
 #================================================================================================
   mariadb:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/mariadb/${MARIADB_VERSION}
+    container_name: dockerframework_mariadb
     ports:
       - "${MARIADB_PORT}:3306"
     volumes:
@@ -228,9 +293,10 @@ services:
 # MEMCACHED
 #================================================================================================
   memcached:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/memcached/${MEMCACHED_VERSION}
+    container_name: dockerframework_memcached
     ports:
       - "${MEMCACHED_PORT}:11211"
     volumes:
@@ -245,9 +311,10 @@ services:
 # MONGODB
 #================================================================================================
   mongodb:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/mongodb/${MONGO_VERSION}
+    container_name: dockerframework_mongodb
     ports:
       - "${MONGO_PORT}:27017"
     volumes:
@@ -272,9 +339,10 @@ services:
 # MYSQL
 #================================================================================================
   mysql:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/mysql/${MYSQL_VERSION}
+    container_name: dockerframework_mysql
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
@@ -297,9 +365,10 @@ services:
 # NGINX
 #================================================================================================
   nginx:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/nginx/${NGINX_VERSION}
+    container_name: dockerframework_nginx
     links:
       - workspace
     ports:
@@ -317,12 +386,35 @@ services:
       - frontend
 
 #================================================================================================
+# NODEEXPORTER
+#================================================================================================
+  nodeexporter:
+    image: prom/node-exporter:v0.15.2
+    container_name: dockerframework_nodeexporter
+    user: root
+    privileged: true
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    ports:
+      - "${NODEEXPORTER_PORT:-9306}:9100"
+    networks:
+      - backend
+
+#================================================================================================
 # PERCONA
 #================================================================================================
   percona:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/percona/${PERCONA_VERSION}
+    container_name: dockerframework_percona
     ports:
       - "${PERCONA_PORT}:3306"
     volumes:
@@ -345,9 +437,10 @@ services:
 # PGADMIN
 #================================================================================================
   pgadmin:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/pgadmin/${PGADMIN_VERSION}
+    container_name: dockerframework_pgadmin
     ports:
       - "${PGADMIN_PORT}:80"
     depends_on:
@@ -367,9 +460,10 @@ services:
 # PHP-FPM
 #================================================================================================
   phpfpm:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/phpfpm/${PHP_VERSION}
+    container_name: dockerframework_phpfpm
     ports:
       - "${PHPFPM_PORT}:80"
       - "${XDEBUG_PORT}:9090"
@@ -395,9 +489,10 @@ services:
 # PHPMYADMIN
 #================================================================================================
   phpmyadmin:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/phpmyadmin/${PHPMYADMIN_VERSION}
+    container_name: dockerframework_phpmyadmin
     ports:
       - "${PHPMYADMIN_PORT}:80"
     depends_on:
@@ -425,9 +520,10 @@ services:
 # PORTAINER
 #================================================================================================
   portainer:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/portainer/${PORTAINER_VERSION}
+    container_name: dockerframework_portainer
     ports:
       - "${PORTAINER_PORT}:9000"
     volumes:
@@ -444,9 +540,10 @@ services:
 # POSTGRESQL
 #================================================================================================
   postgresql:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/postgresql/${POSTGRES_VERSION}
+    container_name: dockerframework_postgresql
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
@@ -462,12 +559,50 @@ services:
       - backend
 
 #================================================================================================
+# PROMETHEUS
+#================================================================================================
+  prometheus:
+    restart: unless-stopped
+    #image: prom/prometheus:v2.3.0
+    build:
+      context: ./docker/prometheus/${PROMETHEUS_VERSION:-2.3.0}
+    container_name: dockerframework_prometheus
+    volumes:
+      - ./config/prometheus/alert.rules:/etc/prometheus/alert.rules
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - "${PROMETHEUS_PORT:-9307}:9090"
+    networks:
+      - backend
+
+#================================================================================================
+# PUSHGATEWAY
+#================================================================================================
+  pushgateway:
+    restart: unless-stopped
+    image: prom/pushgateway
+    container_name: dockerframework_pushgateway
+    ports:
+      - "${PUSHGATEWAY_PORT:-9308}:9091"
+    networks:
+      - backend
+
+#================================================================================================
 # REDIS
 #================================================================================================
   redis:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/redis/${REDIS_VERSION}
+    container_name: dockerframework_redis
     ports:
       - "${REDIS_PORT}:6379"
     volumes:
@@ -482,9 +617,10 @@ services:
 # SOLR
 #================================================================================================
   solr:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/solr/${SOLR_VERSION}
+    container_name: dockerframework_solr
     ports:
       - "${SOLR_PORT}:8983"
     volumes:
@@ -499,9 +635,10 @@ services:
 # SPARK
 #================================================================================================
   spark-master:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/spark/${SPARK_VERSION}
+    container_name: dockerframework_spark_master
     expose:
       - 7001
       - 7002
@@ -533,9 +670,10 @@ services:
       - frontend
 
   spark-worker:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/spark/${SPARK_VERSION}
+    container_name: dockerframework_spark_worker
     expose:
       - 7012
       - 7013
@@ -566,9 +704,10 @@ services:
 # TERRAFORM
 #================================================================================================
   terraform:
-    restart: always
+    restart: unless-stopped
     build:
       context: ./docker/terraform/${TERRAFORM_VERSION}
+    container_name: dockerframework_terraform
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_TERRAFORM}:/data                                      # volume for data
@@ -583,6 +722,7 @@ services:
   workspace:
     build:
       context: ./docker/phpfpm/${PHP_VERSION}
+    container_name: dockerframework_workspace
     ports:
       - "${WORKSPACE_PHPFPM_PORT}:80"
       - "${WORKSPACE_XDEBUG_PORT}:9090"
