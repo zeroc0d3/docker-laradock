@@ -132,7 +132,7 @@ services:
     image: prom/alertmanager:v0.14.0
     container_name: dockerframework_alertmanager
     volumes:
-      - ./data/alertmanager/:/etc/alertmanager/
+      - ./config/alertmanager/:/etc/alertmanager/
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
@@ -154,7 +154,7 @@ services:
       - "${CADDY_PORT:-9303}:9091"
       - "${CADDY_PORT:-9304}:9093"
     volumes:
-      - ./data/caddy/:/etc/caddy/
+      - ./config/caddy/:/etc/caddy/
     environment:
       - ADMIN_USER=laradock
       - ADMIN_PASSWORD=password
@@ -215,7 +215,7 @@ services:
     environment:
       - GRAFANA_VERSION=${GRAFANA_VERSION}
       #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL}
-      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-domikado}
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-laradock}
       - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:-password}
       - GF_INSTALL_PLUGINS=${GF_INSTALL_PLUGINS}
       #- GF_AWS_PROFILES=${GF_AWS_PROFILES}
@@ -308,7 +308,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_MYSQL}:/etc/my.cnf                                  # my.cnf mysql
-      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/domikado.cnf        # domikado.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/laradock.cnf        # laradock.cnf mysql
       - ${DATA_MYSQL}:/var/lib/mysql                                 # volume for data
       - ${LOG_MYSQL}:/var/log/mysql                                  # log mysql
     environment:
@@ -380,7 +380,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_MYSQL}:/etc/my.cnf                                  # my.cnf mysql
-      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/domikado.cnf        # domikado.cnf mysql
+      - ${CONFIG_MYSQL_DOCKER}:/etc/mysql/conf.d/laradock.cnf        # laradock.cnf mysql
       - ${DATA_PERCONA}:/var/lib/mysql                               # volume for data
       - ${LOG_PERCONA}:/var/log/mysql                                # log percona
     environment:
@@ -682,7 +682,7 @@ services:
   workspace:
     build:
       context: ./docker/phpfpm/${PHP_VERSION}
-    container_name: dockerframework_space
+    container_name: dockerframework_workspace
     ports:
       - "${WORKSPACE_PHPFPM_PORT}:80"
       - "${WORKSPACE_XDEBUG_PORT}:9090"
