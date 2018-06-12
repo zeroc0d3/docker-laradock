@@ -18,8 +18,8 @@ DAEMON_MODE="1"                      # (0 = disable daemon mode, 1 = running dae
 USERNAME=`echo $USER`
 PATH_HOME=`echo $HOME`
 
-CONTAINER_PRODUCTION="grafana"
-CONTAINER_DEVELOPMENT="grafana"
+CONTAINER_PRODUCTION="prometheus"
+CONTAINER_DEVELOPMENT="prometheus"
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
